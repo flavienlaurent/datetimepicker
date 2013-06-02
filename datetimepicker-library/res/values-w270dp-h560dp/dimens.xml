@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="selected_calendar_layout_height">230.0dip</dimen>
+    <dimen name="selected_date_year_size">30.0dip</dimen>
+    <dimen name="selected_date_day_size">100.0dip</dimen>
+    <dimen name="selected_date_month_size">30.0dip</dimen>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="done_label">Done</string>
+    <string name="day_picker_description">Month grid of days</string>
+    <string name="year_picker_description">Year list</string>
+    <string name="select_day">Select month and day</string>
+    <string name="select_year">Select year</string>
+    <string name="item_is_selected">%1$s selected</string>
+    <string name="sans_serif">sans-serif</string>
+</resources>
