@@ -19,8 +19,6 @@ This library uses as much as possible the original picker contained in the new G
 
 ![Example Image][1]
 
-![Example Image][5]
-
 Try out the sample APK [here][2]
 
 Or browse the [source code of the sample application][3] for a complete example of use.
@@ -62,7 +60,6 @@ License
 	
 
  [1]: https://raw.github.com/biboune/datetimepicker/master/graphics/img1.png
- [5]: https://raw.github.com/biboune/datetimepicker/master/graphics/img2.png
  [2]: https://raw.github.com/biboune/datetimepicker/master/datetimepicker-sample.apk
  [3]: https://github.com/biboune/datetimepicker/tree/master/datetimepicker-sample
  [4]: https://github.com/biboune/datetimepicker/blob/master/datetimepicker-sample/src/com/fourmob/datetimepicker/sample/MainActivity.java
