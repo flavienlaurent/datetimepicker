@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="done_label">Seleccionar</string>
+    <string name="day_picker_description">Cuadricula de días</string>
+    <string name="year_picker_description">Lista de años</string>
+    <string name="select_day">Selecciona mes y día</string>
+    <string name="select_year">Selecciona año</string>
+    <string name="item_is_selected">%1$s seleccionado</string>
+    <string name="sans_serif">sans-serif</string>
+</resources>
