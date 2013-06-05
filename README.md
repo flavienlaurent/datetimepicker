@@ -10,7 +10,6 @@ Are missing :
 
 * Accessibility
 * Scroll adjustment
-* Translation
 
 Description
 -------------------------
