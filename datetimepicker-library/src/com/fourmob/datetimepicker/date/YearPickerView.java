@@ -65,13 +65,6 @@ public class YearPickerView extends ListView implements AdapterView.OnItemClickL
 		postSetSelectionCentered(this.mController.getSelectedDay().year - this.mController.getMinYear());
 	}
 
-	public void onInitializeAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-		super.onInitializeAccessibilityEvent(accessibilityEvent);
-		if (accessibilityEvent.getEventType() == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
-			accessibilityEvent.setFromIndex(0);
-			accessibilityEvent.setToIndex(0);
-		}
-	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		this.mController.tryVibrate();

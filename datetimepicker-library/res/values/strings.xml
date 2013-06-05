@@ -6,5 +6,6 @@
     <string name="select_day">Select month and day</string>
     <string name="select_year">Select year</string>
     <string name="item_is_selected">%1$s selected</string>
-    <string name="sans_serif">sans-serif</string>
+    <string name="sans_serif" translatable="false">sans-serif</string>
+    <string name="day_of_week_label_typeface" translatable="false">sans-serif</string>
 </resources>

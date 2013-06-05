@@ -1,6 +1,8 @@
 package com.fourmob.datetimepicker.date;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -139,7 +141,14 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
 		setVerticalScrollBarEnabled(false);
 		setOnScrollListener(this);
 		setFadingEdgeLength(0);
-		setFriction(ViewConfiguration.getScrollFriction() * this.mFriction);
+		setFrictionIfSupported(ViewConfiguration.getScrollFriction() * this.mFriction);
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	void setFrictionIfSupported(float friction) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			setFriction(friction);
+		}
 	}
 
 	protected class ScrollStateRunnable implements Runnable {

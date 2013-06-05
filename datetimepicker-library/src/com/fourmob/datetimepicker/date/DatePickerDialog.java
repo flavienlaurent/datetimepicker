@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -28,6 +27,7 @@ import android.widget.ViewAnimator;
 
 import com.fourmob.datetimepicker.R;
 import com.fourmob.datetimepicker.Utils;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 public class DatePickerDialog extends DialogFragment implements View.OnClickListener, DatePickerController {
 	private static final int VIEW_DATE_PICKER_YEAR = 1;
@@ -90,7 +90,6 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			monthDayAnim.start();
 			String monthDayDesc = DateUtils.formatDateTime(getActivity(), timeInMillis, DateUtils.FORMAT_SHOW_DATE);
 			this.mAnimator.setContentDescription(this.mDayPickerDescription + ": " + monthDayDesc);
-			Utils.tryAccessibilityAnnounce(this.mAnimator, this.mSelectDay);
 			return;
 		case VIEW_DATE_PICKER_YEAR:
 			ObjectAnimator yearAnim = Utils.getPulseAnimator(this.mYearView, 0.85F, 1.1F);
@@ -108,7 +107,6 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			yearAnim.start();
 			String dayDesc = YEAR_FORMAT.format(Long.valueOf(timeInMillis));
 			this.mAnimator.setContentDescription(this.mYearPickerDescription + ": " + dayDesc);
-			Utils.tryAccessibilityAnnounce(this.mAnimator, this.mSelectYear);
 		}
 
 	}
