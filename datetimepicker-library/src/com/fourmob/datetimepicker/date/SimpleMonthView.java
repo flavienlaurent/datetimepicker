@@ -1,6 +1,7 @@
 package com.fourmob.datetimepicker.date;
 
 import java.security.InvalidParameterException;
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -63,6 +64,7 @@ public class SimpleMonthView extends View {
 	protected int mWeekStart = 1;
 	protected int mWidth;
 	protected int mYear;
+	private DateFormatSymbols dateformartsymbols = new DateFormatSymbols();
 
 	public SimpleMonthView(Context context) {
 		super(context);
@@ -103,7 +105,7 @@ public class SimpleMonthView extends View {
 			int dayOfWeek = (day + this.mWeekStart) % this.mNumDays;
 			int x = space * (1 + day * 2) + this.mPadding;
 			this.mDayLabelCalendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-			canvas.drawText(this.mDayLabelCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.YEAR, Locale.getDefault()).toUpperCase(Locale.getDefault()), x, y, this.mMonthDayLabelPaint);
+			canvas.drawText(dateformartsymbols.getShortWeekdays()[dayOfWeek+1].toUpperCase(Locale.getDefault()), x, y, this.mMonthDayLabelPaint);
 		}
 	}
 
@@ -126,7 +128,7 @@ public class SimpleMonthView extends View {
 	private String getMonthAndYearString() {
 		this.mStringBuilder.setLength(0);
 		long dateInMillis = this.mCalendar.getTimeInMillis();
-		return DateUtils.formatDateRange(getContext(), this.mFormatter, dateInMillis, dateInMillis, 52, Time.getCurrentTimezone()).toString();
+		return DateUtils.formatDateRange(getContext(), dateInMillis, dateInMillis, 52).toString();
 	}
 
 	private void onDayClick(SimpleMonthAdapter.CalendarDay calendarDay) {
