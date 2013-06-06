@@ -114,10 +114,12 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	private void updateDisplay() {  
-		if (this.mDayOfWeekView != null)
-			this.mDayOfWeekView.setText(dateformartsymbols.getWeekdays()[Calendar.DAY_OF_WEEK].toUpperCase(Locale.getDefault()));
-		
-		this.mSelectedMonthTextView.setText(dateformartsymbols.getMonths()[this.mCalendar.getTime().getMonth()].toUpperCase(Locale.getDefault()));
+		if (this.mDayOfWeekView != null){
+			this.mCalendar.setFirstDayOfWeek(mWeekStart);
+			this.mDayOfWeekView.setText(dateformartsymbols.getWeekdays()[this.mCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()));
+		}
+			
+		this.mSelectedMonthTextView.setText(dateformartsymbols.getMonths()[this.mCalendar.get(Calendar.MONTH)].toUpperCase(Locale.getDefault()));
 		this.mSelectedDayTextView.setText(DAY_FORMAT.format(this.mCalendar.getTime()));
 		this.mYearView.setText(YEAR_FORMAT.format(this.mCalendar.getTime()));
 		long timeInMillis = this.mCalendar.getTimeInMillis();
