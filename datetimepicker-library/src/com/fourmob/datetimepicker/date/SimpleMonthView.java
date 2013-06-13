@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -126,7 +127,8 @@ public class SimpleMonthView extends View {
 	private String getMonthAndYearString() {
 		this.mStringBuilder.setLength(0);
 		long dateInMillis = this.mCalendar.getTimeInMillis();
-		return DateUtils.formatDateRange(getContext(), this.mFormatter, dateInMillis, dateInMillis, 52, Time.getCurrentTimezone()).toString();
+		Log.d("SimpleMonthView", "monthAndYear : " + this.mCalendar.getTime());
+		return DateUtils.formatDateRange(getContext(), this.mFormatter, dateInMillis, dateInMillis, DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NO_MONTH_DAY, Time.getCurrentTimezone()).toString();
 	}
 
 	private void onDayClick(SimpleMonthAdapter.CalendarDay calendarDay) {

@@ -30,6 +30,10 @@ import com.fourmob.datetimepicker.Utils;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 public class DatePickerDialog extends DialogFragment implements View.OnClickListener, DatePickerController {
+	// https://code.google.com/p/android/issues/detail?id=13050
+	private static final int MAX_YEAR = 2037;
+	private static final int MIN_YEAR = 1902;
+
 	private static final int VIEW_DATE_PICKER_YEAR = 1;
 	private static final int VIEW_DATE_PICKER_MONTH_DAY = 0;
 	private static SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd", Locale.getDefault());
@@ -45,8 +49,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	private Button mDoneButton;
 	private long mLastVibrate;
 	private HashSet<OnDateChangedListener> mListeners = new HashSet<OnDateChangedListener>();
-	private int mMaxYear = 2100;
-	private int mMinYear = 1970;
+	private int mMaxYear = MAX_YEAR;
+	private int mMinYear = MIN_YEAR;
 	private LinearLayout mMonthAndDayView;
 	private String mSelectDay;
 	private String mSelectYear;
@@ -145,6 +149,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	public void initialize(OnDateSetListener onDateSetListener, int year, int month, int day) {
+		if (year > MAX_YEAR)
+			throw new IllegalArgumentException("year end must < " + MAX_YEAR);
+		if (year < MIN_YEAR)
+			throw new IllegalArgumentException("year end must > " + MIN_YEAR);
 		this.mCallBack = onDateSetListener;
 		this.mCalendar.set(Calendar.YEAR, year);
 		this.mCalendar.set(Calendar.MONTH, month);
@@ -288,6 +296,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	public void setYearRange(int minYear, int maxYear) {
 		if (maxYear <= minYear)
 			throw new IllegalArgumentException("Year end must be larger than year start");
+		if (maxYear > MAX_YEAR)
+			throw new IllegalArgumentException("max year end must < " + MAX_YEAR);
+		if (minYear < MIN_YEAR)
+			throw new IllegalArgumentException("min year end must > " + MIN_YEAR);
 		this.mMinYear = minYear;
 		this.mMaxYear = maxYear;
 		if (this.mDayPickerView != null)

@@ -18,18 +18,19 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 
 		final DatePickerDialog datePickerDialog = new DatePickerDialog();
-		datePickerDialog.setOnDateSetListener(new OnDateSetListener() {
+		datePickerDialog.initialize(new OnDateSetListener() {
 
 			@Override
 			public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
 				Toast.makeText(MainActivity.this, "new date:" + year + "-" + month + "-" + day, Toast.LENGTH_LONG).show();
 			}
-		});
+		}, 2007, 10, 1);
 
 		findViewById(R.id.button1).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				datePickerDialog.setYearRange(1985, 2028);
 				datePickerDialog.show(getSupportFragmentManager(), "datepicker");
 			}
 		});
