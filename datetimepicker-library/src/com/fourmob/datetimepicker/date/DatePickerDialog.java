@@ -1,5 +1,6 @@
 package com.fourmob.datetimepicker.date;
 
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -61,6 +62,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	private String mYearPickerDescription;
 	private YearPickerView mYearPickerView;
 	private TextView mYearView;
+	private DateFormatSymbols dateformartsymbols = new DateFormatSymbols();
 
 	private void adjustDayInMonthIfNeeded(int month, int year) {
 		int currentDay = this.mCalendar.get(Calendar.DAY_OF_MONTH);
@@ -115,10 +117,13 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
 	}
 
-	private void updateDisplay() {
-		if (this.mDayOfWeekView != null)
-			this.mDayOfWeekView.setText(this.mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()).toUpperCase(Locale.getDefault()));
-		this.mSelectedMonthTextView.setText(this.mCalendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()).toUpperCase(Locale.getDefault()));
+	private void updateDisplay() {  
+		if (this.mDayOfWeekView != null){
+			this.mCalendar.setFirstDayOfWeek(mWeekStart);
+			this.mDayOfWeekView.setText(dateformartsymbols.getWeekdays()[this.mCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()));
+		}
+			
+		this.mSelectedMonthTextView.setText(dateformartsymbols.getMonths()[this.mCalendar.get(Calendar.MONTH)].toUpperCase(Locale.getDefault()));
 		this.mSelectedDayTextView.setText(DAY_FORMAT.format(this.mCalendar.getTime()));
 		this.mYearView.setText(YEAR_FORMAT.format(this.mCalendar.getTime()));
 		long timeInMillis = this.mCalendar.getTimeInMillis();
