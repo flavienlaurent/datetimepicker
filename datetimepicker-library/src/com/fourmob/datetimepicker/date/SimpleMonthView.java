@@ -64,7 +64,7 @@ public class SimpleMonthView extends View {
 	protected int mWeekStart = 1;
 	protected int mWidth;
 	protected int mYear;
-	private DateFormatSymbols mDateFormartSymbols = new DateFormatSymbols();
+	private DateFormatSymbols mDateFormatSymbols = new DateFormatSymbols();
 
 	public SimpleMonthView(Context context) {
 		super(context);
@@ -105,7 +105,7 @@ public class SimpleMonthView extends View {
 			int dayOfWeek = (day + this.mWeekStart) % this.mNumDays;
 			int x = space * (1 + day * 2) + this.mPadding;
 			this.mDayLabelCalendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-			canvas.drawText(mDateFormartSymbols.getShortWeekdays()[this.mDayLabelCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()), x, y, this.mMonthDayLabelPaint);
+			canvas.drawText(mDateFormatSymbols.getShortWeekdays()[this.mDayLabelCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()), x, y, this.mMonthDayLabelPaint);
 		}
 	}
 
