@@ -14,7 +14,7 @@ Are missing :
 Description
 -------------------------
 
-This library uses as much as possible the original picker contained in the new Google Agenda app.
+This library reproduces as much as possible the original picker contained in the new Google Agenda app.
 
 ![Example Image][1]
 
