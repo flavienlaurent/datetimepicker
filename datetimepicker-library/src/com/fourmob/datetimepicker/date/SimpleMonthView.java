@@ -1,12 +1,5 @@
 package com.fourmob.datetimepicker.date;
 
-import java.security.InvalidParameterException;
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-import java.util.Formatter;
-import java.util.HashMap;
-import java.util.Locale;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -16,9 +9,15 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.fourmob.datetimepicker.R;
 import com.fourmob.datetimepicker.Utils;
+
+import java.security.InvalidParameterException;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class SimpleMonthView extends View {
 	protected static int DAY_SELECTED_CIRCLE_SIZE;
@@ -169,11 +168,11 @@ public class SimpleMonthView extends View {
 		if ((x < padding) || (x > this.mWidth - this.mPadding)) {
 			return null;
 		}
-		int day;
-		do {
-			int yDay = (int) (y - MONTH_HEADER_SIZE) / this.mRowHeight;
-			day = 1 + ((int) ((x - padding) * this.mNumDays / (this.mWidth - padding - this.mPadding)) - findDayOffset()) + yDay * this.mNumDays;
-		} while ((day < 1) || (day > this.mNumCells));
+		;
+
+		int yDay = (int) (y - MONTH_HEADER_SIZE) / this.mRowHeight;
+		int day = 1 + ((int) ((x - padding) * this.mNumDays / (this.mWidth - padding - this.mPadding)) - findDayOffset()) + yDay * this.mNumDays;
+		
 		return new SimpleMonthAdapter.CalendarDay(this.mYear, this.mMonth, day);
 	}
 
