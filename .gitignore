@@ -4,6 +4,8 @@
 
 .idea
 gen
+*.class
+out
 
 #################
 ## Eclipse
