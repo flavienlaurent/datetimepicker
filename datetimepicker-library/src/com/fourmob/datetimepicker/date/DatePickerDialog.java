@@ -83,6 +83,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	private void setCurrentView(int currentView) {
+		setCurrentView(currentView, false);
+	}
+
+	private void setCurrentView(int currentView, boolean forceRefresh) {
 		long timeInMillis = this.mCalendar.getTimeInMillis();
 		switch (currentView) {
 		case VIEW_DATE_PICKER_MONTH_DAY:
@@ -92,7 +96,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 				this.mDelayAnimation = false;
 			}
 			this.mDayPickerView.onDateChanged();
-			if (this.mCurrentView != currentView) {
+			if (this.mCurrentView != currentView || forceRefresh) {
 				this.mMonthAndDayView.setSelected(true);
 				this.mYearView.setSelected(false);
 				this.mAnimator.setDisplayedChild(VIEW_DATE_PICKER_MONTH_DAY);
@@ -109,7 +113,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 				this.mDelayAnimation = false;
 			}
 			this.mYearPickerView.onDateChanged();
-			if (this.mCurrentView != currentView) {
+			if (this.mCurrentView != currentView  || forceRefresh) {
 				this.mMonthAndDayView.setSelected(false);
 				this.mYearView.setSelected(true);
 				this.mAnimator.setDisplayedChild(VIEW_DATE_PICKER_YEAR);
@@ -202,7 +206,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		this.mYearView = ((TextView) view.findViewById(R.id.date_picker_year));
 		this.mYearView.setOnClickListener(this);
 		int listPosition = -1;
-		int currentView = 0;
+		int currentView = VIEW_DATE_PICKER_MONTH_DAY;
 		int listPositionOffset = 0;
 		if (bundle != null) {
 			this.mWeekStart = bundle.getInt("week_start");
@@ -240,7 +244,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			}
 		});
 		updateDisplay();
-		setCurrentView(currentView);
+		setCurrentView(currentView, true);
 
 		if (listPosition != -1) {
 			if (currentView == VIEW_DATE_PICKER_MONTH_DAY) {
