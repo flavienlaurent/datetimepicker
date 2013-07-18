@@ -6,6 +6,9 @@
 gen
 *.class
 out
+*.iml
+gen
+project.properties
 
 #################
 ## Eclipse
