@@ -2,12 +2,12 @@
 ## AndroidStudio
 #################
 
+project.properties
 .idea
 gen
 *.class
 out
 *.iml
-project.properties
 
 #################
 ## Eclipse
