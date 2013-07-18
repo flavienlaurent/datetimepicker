@@ -20,7 +20,15 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="Button" />
-        
-        
+
+	<CheckBox
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="vibrate"
+			android:id="@+id/checkBoxVibrate"
+			android:layout_above="@+id/button1"
+			android:layout_centerHorizontal="true"
+			android:checked="true"/>
+
 
 </RelativeLayout>

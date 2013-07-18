@@ -1,12 +1,5 @@
 package com.fourmob.datetimepicker.date;
 
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,20 +8,22 @@ import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
-
 import com.fourmob.datetimepicker.R;
 import com.fourmob.datetimepicker.Utils;
 import com.nineoldandroids.animation.ObjectAnimator;
+
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
 
 public class DatePickerDialog extends DialogFragment implements View.OnClickListener, DatePickerController {
 	// https://code.google.com/p/android/issues/detail?id=13050
@@ -64,6 +59,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	private TextView mYearView;
 	private DateFormatSymbols dateformartsymbols = new DateFormatSymbols();
 
+	private boolean mVibrate = true;
+
 	private void adjustDayInMonthIfNeeded(int month, int year) {
 		int currentDay = this.mCalendar.get(Calendar.DAY_OF_MONTH);
 		int day = Utils.getDaysInMonth(month, year);
@@ -72,9 +69,17 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day) {
+		return newInstance(onDateSetListener, year, month, day, true);
+	}
+
+	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate) {
 		DatePickerDialog datePickerDialog = new DatePickerDialog();
-		datePickerDialog.initialize(onDateSetListener, year, month, day);
+		datePickerDialog.initialize(onDateSetListener, year, month, day, vibrate);
 		return datePickerDialog;
+	}
+
+	public void setVibrate(boolean vibrate) {
+		this.mVibrate = vibrate;
 	}
 
 	private void setCurrentView(int currentView) {
@@ -153,7 +158,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		return new SimpleMonthAdapter.CalendarDay(this.mCalendar);
 	}
 
-	public void initialize(OnDateSetListener onDateSetListener, int year, int month, int day) {
+	public void initialize(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate) {
 		if (year > MAX_YEAR)
 			throw new IllegalArgumentException("year end must < " + MAX_YEAR);
 		if (year < MIN_YEAR)
@@ -162,6 +167,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		this.mCalendar.set(Calendar.YEAR, year);
 		this.mCalendar.set(Calendar.MONTH, month);
 		this.mCalendar.set(Calendar.DAY_OF_MONTH, day);
+		this.mVibrate = vibrate;
 	}
 
 	public void onClick(View view) {
@@ -312,7 +318,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	public void tryVibrate() {
-		if (this.mVibrator != null) {
+		if (this.mVibrator != null && this.mVibrate) {
 			long timeInMillis = SystemClock.uptimeMillis();
 			if (timeInMillis - this.mLastVibrate >= 125L) {
 				this.mVibrator.vibrate(5L);

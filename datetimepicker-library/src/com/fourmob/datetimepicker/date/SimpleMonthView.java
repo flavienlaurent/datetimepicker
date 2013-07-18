@@ -172,7 +172,7 @@ public class SimpleMonthView extends View {
 
 		int yDay = (int) (y - MONTH_HEADER_SIZE) / this.mRowHeight;
 		int day = 1 + ((int) ((x - padding) * this.mNumDays / (this.mWidth - padding - this.mPadding)) - findDayOffset()) + yDay * this.mNumDays;
-		
+
 		return new SimpleMonthAdapter.CalendarDay(this.mYear, this.mMonth, day);
 	}
 
