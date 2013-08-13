@@ -6,6 +6,7 @@ DateTimePicker
 ==================
 
 DateTimePicker is a library which contains the beautiful DatePicker that can be seen in the new Google Agenda app. (Currently working on the TimePicker)
+** This picker is available for 2.1+**
 
 WARNING
 -------------------------
