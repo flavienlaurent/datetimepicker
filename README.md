@@ -45,7 +45,7 @@ Acknowledgements
 License
 -----------
 
-    Copyright 2013 biboune
+    Copyright 2013 biboune (DatePicker) edisonw (TimePicker)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -59,9 +59,6 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 	
-	
-	
-
  [1]: https://raw.github.com/biboune/datetimepicker/master/graphics/img1.png
  [2]: https://raw.github.com/biboune/datetimepicker/master/datetimepicker-sample.apk
  [3]: https://github.com/biboune/datetimepicker/tree/master/datetimepicker-sample
