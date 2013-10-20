@@ -5,17 +5,15 @@ https://android.googlesource.com/platform/frameworks/opt/datetimepicker/
 DateTimePicker  
 ==================
 
-DateTimePicker is a library which contains the beautiful DatePicker that can be seen in the new Google Agenda app. (Currently working on the TimePicker)
+DateTimePicker is a library which contains the beautiful DatePicker and TimePicker that can be seen in the new Google Agenda app.
 
 **This picker is available for 2.1+**
 
 WARNING
 -------------------------
 
-Are missing :
-
-* Accessibility
-* Scroll adjustment
+* Accessibility is missing for DatePicker on all devices and Below ICS devices for TimePicker.
+* Scroll adjustment for DatePicker on all devices and Below ICS devices for TimePicker.
 
 Description
 -------------------------

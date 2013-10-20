@@ -2,6 +2,7 @@ package com.fourmob.datetimepicker;
 
 import android.os.Build;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 
 import com.nineoldandroids.animation.Keyframe;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -50,4 +51,15 @@ public class Utils {
 		return Build.VERSION.SDK_INT >= 16;
 	}
 
+    public static void tryAccessibilityAnnounce(Object obj, Object announcement) {
+        //TODO
+    }
+
+    public static boolean isTouchExplorationEnabled(AccessibilityManager accessibilityManager) {
+        if (Build.VERSION.SDK_INT >= 14) {
+            return accessibilityManager.isTouchExplorationEnabled();
+        } else {
+            return false;
+        }
+    }
 }
