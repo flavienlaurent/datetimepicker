@@ -1,6 +1,7 @@
-/!\ DateTimePicker is now opensource
+DateTimePicker Compatibility Library
 ====================================
 https://android.googlesource.com/platform/frameworks/opt/datetimepicker/
+(Android 4.3+)
 
 DateTimePicker  
 ==================
@@ -58,7 +59,7 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-	
+
  [1]: https://raw.github.com/biboune/datetimepicker/master/graphics/img1.png
  [2]: https://raw.github.com/biboune/datetimepicker/master/datetimepicker-sample.apk
  [3]: https://github.com/biboune/datetimepicker/tree/master/datetimepicker-sample
