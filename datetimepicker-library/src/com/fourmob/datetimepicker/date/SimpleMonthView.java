@@ -168,7 +168,6 @@ public class SimpleMonthView extends View {
 		if ((x < padding) || (x > this.mWidth - this.mPadding)) {
 			return null;
 		}
-		;
 
 		int yDay = (int) (y - MONTH_HEADER_SIZE) / this.mRowHeight;
 		int day = 1 + ((int) ((x - padding) * this.mNumDays / (this.mWidth - padding - this.mPadding)) - findDayOffset()) + yDay * this.mNumDays;
