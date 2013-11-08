@@ -46,7 +46,7 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 			simpleMonthView = (SimpleMonthView) convertView;
 		else {
 			simpleMonthView = new SimpleMonthView(this.mContext);
-			simpleMonthView.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+			simpleMonthView.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			simpleMonthView.setClickable(true);
 			simpleMonthView.setOnDayClickListener(this);
 		}

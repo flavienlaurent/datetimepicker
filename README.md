@@ -1,21 +1,20 @@
-/!\ DateTimePicker is now opensource
+DateTimePicker Compatibility Library
 ====================================
 https://android.googlesource.com/platform/frameworks/opt/datetimepicker/
+(Android 4.3+)
 
 DateTimePicker  
 ==================
 
-DateTimePicker is a library which contains the beautiful DatePicker that can be seen in the new Google Agenda app. (Currently working on the TimePicker)
+DateTimePicker is a library which contains the beautiful DatePicker and TimePicker that can be seen in the new Google Agenda app.
 
 **This picker is available for 2.1+**
 
 WARNING
 -------------------------
 
-Are missing :
-
-* Accessibility
-* Scroll adjustment
+* Accessibility is missing for DatePicker on all devices and Below ICS devices for TimePicker.
+* Scroll adjustment for DatePicker on all devices and Below ICS devices for TimePicker.
 
 Description
 -------------------------
@@ -47,7 +46,7 @@ Acknowledgements
 License
 -----------
 
-    Copyright 2013 biboune
+    Copyright 2013 biboune (DatePicker) edisonw (TimePicker)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -60,9 +59,6 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-	
-	
-	
 
  [1]: https://raw.github.com/biboune/datetimepicker/master/graphics/img1.png
  [2]: https://raw.github.com/biboune/datetimepicker/master/datetimepicker-sample.apk

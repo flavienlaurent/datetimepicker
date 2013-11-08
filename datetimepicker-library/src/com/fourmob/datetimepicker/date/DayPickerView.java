@@ -86,7 +86,6 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
 		super.layoutChildren();
 		if (this.mPerformingScroll) {
 			this.mPerformingScroll = false;
-			return;
 		}
 	}
 
