@@ -20,7 +20,8 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
         setContentView(R.layout.activity_main);
 
         final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this, 2007, 10, 1, isVibrate());
-
+        datePickerDialog.setTitle("Please select a date.");
+        
         final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, 0 ,0, false);
 
         findViewById(R.id.dateButton).setOnClickListener(new OnClickListener() {
