@@ -38,7 +38,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	private final Calendar mCalendar = Calendar.getInstance();
 	private OnDateSetListener mCallBack;
 	private int mCurrentView = -1;
-	private TextView mDayOfWeekView;
+	private TextView mHeaderView;
 	private String mDayPickerDescription;
 	private DayPickerView mDayPickerView;
 	private boolean mDelayAnimation = true;
@@ -60,6 +60,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	private DateFormatSymbols dateformartsymbols = new DateFormatSymbols();
 
 	private boolean mVibrate = true;
+	private String mTitle;
 
 	private void adjustDayInMonthIfNeeded(int month, int year) {
 		int currentDay = this.mCalendar.get(Calendar.DAY_OF_MONTH);
@@ -80,6 +81,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
 	public void setVibrate(boolean vibrate) {
 		this.mVibrate = vibrate;
+	}
+	
+	public void setTitle(String title) {
+		this.mTitle = title;
 	}
 
 	private void setCurrentView(int currentView) {
@@ -127,9 +132,14 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	private void updateDisplay() {  
-		if (this.mDayOfWeekView != null){
+		if (this.mHeaderView != null){
 			this.mCalendar.setFirstDayOfWeek(mWeekStart);
-			this.mDayOfWeekView.setText(dateformartsymbols.getWeekdays()[this.mCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()));
+			
+			if (this.mTitle != null) {
+				this.mHeaderView.setText(mTitle);
+			} else {
+				this.mHeaderView.setText(dateformartsymbols.getWeekdays()[this.mCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()));
+			}
 		}
 			
 		this.mSelectedMonthTextView.setText(dateformartsymbols.getMonths()[this.mCalendar.get(Calendar.MONTH)].toUpperCase(Locale.getDefault()));
@@ -198,7 +208,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		Log.d("DatePickerDialog", "onCreateView: ");
 		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		View view = layoutInflater.inflate(R.layout.date_picker_dialog, null);
-		this.mDayOfWeekView = ((TextView) view.findViewById(R.id.date_picker_header));
+		this.mHeaderView = ((TextView) view.findViewById(R.id.date_picker_header));
 		this.mMonthAndDayView = ((LinearLayout) view.findViewById(R.id.date_picker_month_and_day));
 		this.mMonthAndDayView.setOnClickListener(this);
 		this.mSelectedMonthTextView = ((TextView) view.findViewById(R.id.date_picker_month));
