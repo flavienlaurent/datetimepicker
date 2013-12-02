@@ -12,16 +12,23 @@ import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends FragmentActivity implements OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
+    public static final String DATEPICKER_TAG = "datepicker";
+    public static final String TIMEPICKER_TAG = "timepicker";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this, 2007, 10, 1, isVibrate());
+        final Calendar calendar = Calendar.getInstance();
 
-        final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, 0 ,0, false, false);
+        final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), isVibrate());
+        final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY) ,calendar.get(Calendar.MINUTE), false, false);
 
         findViewById(R.id.dateButton).setOnClickListener(new OnClickListener() {
 
@@ -29,7 +36,7 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
             public void onClick(View v) {
                 datePickerDialog.setVibrate(isVibrate());
                 datePickerDialog.setYearRange(1985, 2028);
-                datePickerDialog.show(getSupportFragmentManager(), "datepicker");
+                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
             }
         });
 
@@ -37,9 +44,21 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
             @Override
             public void onClick(View v) {
                 timePickerDialog.setVibrate(isVibrate());
-                timePickerDialog.show(getSupportFragmentManager(), "time picker");
+                timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
             }
         });
+
+        if (savedInstanceState != null) {
+            DatePickerDialog dpd = (DatePickerDialog) getSupportFragmentManager().findFragmentByTag(DATEPICKER_TAG);
+            if (dpd != null) {
+                dpd.setOnDateSetListener(this);
+            }
+
+            TimePickerDialog tpd = (TimePickerDialog) getSupportFragmentManager().findFragmentByTag(TIMEPICKER_TAG);
+            if (tpd != null) {
+                tpd.setOnTimeSetListener(this);
+            }
+        }
     }
 
     private boolean isVibrate() {
@@ -53,6 +72,6 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-
+        Toast.makeText(MainActivity.this, "new time:" + hourOfDay + "-" + minute, Toast.LENGTH_LONG).show();
     }
 }
