@@ -21,7 +21,7 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
 
         final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this, 2007, 10, 1, isVibrate());
 
-        final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, 0 ,0, false);
+        final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, 0 ,0, false, false);
 
         findViewById(R.id.dateButton).setOnClickListener(new OnClickListener() {
 
@@ -36,6 +36,7 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
         findViewById(R.id.timeButton).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                timePickerDialog.setVibrate(isVibrate());
                 timePickerDialog.show(getSupportFragmentManager(), "time picker");
             }
         });

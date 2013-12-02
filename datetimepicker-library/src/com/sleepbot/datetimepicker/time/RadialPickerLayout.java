@@ -61,6 +61,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     private static final int PM = TimePickerDialog.PM;
 
     private Vibrator mVibrator;
+    private boolean mVibrate = true;
     private long mLastVibrate;
     private int mLastValueSelected;
 
@@ -170,13 +171,15 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
      * @param is24HourMode
      */
     public void initialize(Context context, int initialHoursOfDay, int initialMinutes,
-                           boolean is24HourMode) {
+                           boolean is24HourMode, boolean vibrate) {
         if (mTimeInitialized) {
             Log.e(TAG, "Time has already been initialized.");
             return;
         }
         mIs24HourMode = is24HourMode;
         mHideAmPm = Utils.isTouchExplorationEnabled(mAccessibilityManager) ? true : mIs24HourMode;
+
+        mVibrate = vibrate;
 
         // Initialize the circle and AM/PM circles if applicable.
         mCircleView.initialize(context, mHideAmPm);
@@ -222,6 +225,10 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     public void setTime(int hours, int minutes) {
         setItem(HOUR_INDEX, hours);
         setItem(MINUTE_INDEX, minutes);
+    }
+
+    public void setVibrate(boolean vibrate) {
+        mVibrate = vibrate;
     }
 
     /**
@@ -738,7 +745,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
      * happen if we have vibrated very recently.
      */
     public void tryVibrate() {
-        if (mVibrator != null) {
+        if (mVibrate && mVibrator != null) {
             long now = SystemClock.uptimeMillis();
             // We want to try to vibrate each individual tick discretely.
             if (now - mLastVibrate >= 125) {
