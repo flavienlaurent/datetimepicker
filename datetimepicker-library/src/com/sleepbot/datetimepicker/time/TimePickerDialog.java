@@ -104,6 +104,9 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
     private String mMinutePickerDescription;
     private String mSelectMinutes;
 
+    // Enable/Disable Vibrations
+    private boolean mVibrate = true;
+
     /**
      * The callback interface used to indicate the user is done filling in
      * the time (they clicked on the 'Set' button).
@@ -120,19 +123,25 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
 
     public static TimePickerDialog newInstance(OnTimeSetListener callback,
                                                int hourOfDay, int minute, boolean is24HourMode) {
+        return newInstance(callback, hourOfDay, minute, is24HourMode, true);
+    }
+
+    public static TimePickerDialog newInstance(OnTimeSetListener callback,
+                                               int hourOfDay, int minute, boolean is24HourMode, boolean vibrate) {
         TimePickerDialog ret = new TimePickerDialog();
-        ret.initialize(callback, hourOfDay, minute, is24HourMode);
+        ret.initialize(callback, hourOfDay, minute, is24HourMode, vibrate);
         return ret;
     }
 
     public void initialize(OnTimeSetListener callback,
-                           int hourOfDay, int minute, boolean is24HourMode) {
+                           int hourOfDay, int minute, boolean is24HourMode, boolean vibrate) {
         mCallback = callback;
 
         mInitialHourOfDay = hourOfDay;
         mInitialMinute = minute;
         mIs24HourMode = is24HourMode;
         mInKbMode = false;
+        mVibrate = vibrate;
     }
 
     public void setOnTimeSetListener(OnTimeSetListener callback) {
@@ -143,6 +152,12 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         mInitialHourOfDay = hourOfDay;
         mInitialMinute = minute;
         mInKbMode = false;
+    }
+
+    public void setVibrate(boolean vibrate) {
+        mVibrate = vibrate;
+        if (mTimePicker != null)
+            mTimePicker.setVibrate(vibrate);
     }
 
     @Override
@@ -207,7 +222,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         mTimePicker = (RadialPickerLayout) view.findViewById(R.id.time_picker);
         mTimePicker.setOnValueSelectedListener(this);
         mTimePicker.setOnKeyListener(keyboardListener);
-        mTimePicker.initialize(getActivity(), mInitialHourOfDay, mInitialMinute, mIs24HourMode);
+        mTimePicker.initialize(getActivity(), mInitialHourOfDay, mInitialMinute, mIs24HourMode, mVibrate);
         int currentItemShowing = HOUR_INDEX;
         if (savedInstanceState != null &&
                 savedInstanceState.containsKey(KEY_CURRENT_ITEM_SHOWING)) {
