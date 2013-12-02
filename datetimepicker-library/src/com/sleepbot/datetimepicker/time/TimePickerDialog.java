@@ -54,6 +54,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
     private static final String KEY_CURRENT_ITEM_SHOWING = "current_item_showing";
     private static final String KEY_IN_KB_MODE = "in_kb_mode";
     private static final String KEY_TYPED_TIMES = "typed_times";
+    private static final String KEY_VIBRATE = "vibrate";
 
     public static final int HOUR_INDEX = 0;
     public static final int MINUTE_INDEX = 1;
@@ -170,6 +171,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             mInitialMinute = savedInstanceState.getInt(KEY_MINUTE);
             mIs24HourMode = savedInstanceState.getBoolean(KEY_IS_24_HOUR_VIEW);
             mInKbMode = savedInstanceState.getBoolean(KEY_IN_KB_MODE);
+            mVibrate = savedInstanceState.getBoolean(KEY_VIBRATE);
         }
     }
 
@@ -339,6 +341,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             if (mInKbMode) {
                 outState.putIntegerArrayList(KEY_TYPED_TIMES, mTypedTimes);
             }
+            outState.putBoolean(KEY_VIBRATE, mVibrate);
         }
     }
 

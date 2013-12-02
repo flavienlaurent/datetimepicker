@@ -191,6 +191,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			this.mCalendar.set(Calendar.YEAR, bundle.getInt("year"));
 			this.mCalendar.set(Calendar.MONTH, bundle.getInt("month"));
 			this.mCalendar.set(Calendar.DAY_OF_MONTH, bundle.getInt("day"));
+			this.mVibrate = bundle.getBoolean("vibrate");
 		}
 	}
 
@@ -282,6 +283,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			mostVisiblePosition = this.mYearPickerView.getFirstVisiblePosition();
 			bundle.putInt("list_position_offset", this.mYearPickerView.getFirstPositionOffset());
 		}
+		bundle.putBoolean("vibrate", this.mVibrate);
 	}
 
 	public void onYearSelected(int year) {
