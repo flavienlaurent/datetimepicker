@@ -2,6 +2,7 @@
 ## AndroidStudio
 #################
 
+.gradle
 project.properties
 .idea
 gen

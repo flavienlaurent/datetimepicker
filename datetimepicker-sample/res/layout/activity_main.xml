@@ -6,12 +6,6 @@
     android:gravity="center"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:text="@string/hello_world" />
-
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
