@@ -122,6 +122,10 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute);
     }
 
+    public TimePickerDialog() {
+        // Empty constructor required for dialog fragment. DO NOT REMOVE
+    }
+
     public static TimePickerDialog newInstance(OnTimeSetListener callback,
                                                int hourOfDay, int minute, boolean is24HourMode) {
         return newInstance(callback, hourOfDay, minute, is24HourMode, true);

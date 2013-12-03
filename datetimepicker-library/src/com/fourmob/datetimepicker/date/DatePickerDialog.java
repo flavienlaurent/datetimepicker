@@ -68,6 +68,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			this.mCalendar.set(Calendar.DAY_OF_MONTH, day);
 	}
 
+    public DatePickerDialog() {
+        // Empty constructor required for dialog fragment. DO NOT REMOVE
+    }
+
 	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day) {
 		return newInstance(onDateSetListener, year, month, day, true);
 	}
@@ -77,6 +81,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		datePickerDialog.initialize(onDateSetListener, year, month, day, vibrate);
 		return datePickerDialog;
 	}
+
 
 	public void setVibrate(boolean vibrate) {
 		this.mVibrate = vibrate;
