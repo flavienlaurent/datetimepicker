@@ -16,6 +16,8 @@ android {
     defaultConfig {
         minSdkVersion 7
         targetSdkVersion 19
+        versionName project.VERSION_NAME
+        versionCode Integer.parseInt(project.VERSION_CODE)
     }
 	
 	sourceSets {
@@ -30,3 +32,5 @@ android {
         }
 	}
 }
+
+apply from: '../maven_push.gradle'
