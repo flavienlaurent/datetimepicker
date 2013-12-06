@@ -17,6 +17,7 @@ package com.sleepbot.datetimepicker.time;
  */
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.res.Resources;
@@ -94,6 +95,8 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     private AnimatorSet mTransition;
     private Handler mHandler = new Handler();
 
+    private int mMinutesInterval = 1;
+    
     public interface OnValueSelectedListener {
         void onValueSelected(int pickerIndex, int newValue, boolean autoAdvance);
     }
@@ -171,7 +174,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
      * @param is24HourMode
      */
     public void initialize(Context context, int initialHoursOfDay, int initialMinutes,
-                           boolean is24HourMode, boolean vibrate) {
+                           boolean is24HourMode, boolean vibrate, int minutesInterval) {
         if (mTimeInitialized) {
             Log.e(TAG, "Time has already been initialized.");
             return;
@@ -203,10 +206,17 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
             innerHoursTexts[i] = String.format("%d", hours[i]);
             minutesTexts[i] = String.format("%02d", minutes[i]);
         }
+        
+        mMinutesInterval = minutesInterval;
+        boolean[] minutesEnabled = new boolean[12];
+        for (int i = 0; i < 12; i++) {
+            minutesEnabled[i] = (i*5 % minutesInterval == 0);
+        }
+        
         mHourRadialTextsView.initialize(res,
-                hoursTexts, (is24HourMode ? innerHoursTexts : null), mHideAmPm, true);
+                hoursTexts, (is24HourMode ? innerHoursTexts : null), null, mHideAmPm, true);
         mHourRadialTextsView.invalidate();
-        mMinuteRadialTextsView.initialize(res, minutesTexts, null, mHideAmPm, false);
+        mMinuteRadialTextsView.initialize(res, minutesTexts, null, minutesEnabled, mHideAmPm, false);
         mMinuteRadialTextsView.invalidate();
 
         // Initialize the currently-selected hour and minute.
@@ -375,6 +385,20 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     }
 
     /**
+     * Snaps to the nearest valid minute value.
+     */
+    private int snapValid(int degrees) {
+        int stepSize = 360 / (60 / mMinutesInterval);
+        int floor = (degrees/stepSize) * stepSize;
+        int ceiling = floor + stepSize;
+        if ((degrees - floor) < (ceiling - degrees)) {
+            return floor;
+        } else {
+            return ceiling;
+        }
+    }
+    
+    /**
      * Returns mapping of any input degrees (0 to 360) to one of 60 selectable output degrees,
      * where the degrees corresponding to visible numbers (i.e. those divisible by 30) will be
      * weighted heavier than the degrees corresponding to non-visible numbers.
@@ -442,7 +466,10 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
 
         int stepSize;
         boolean allowFineGrained = !forceToVisibleValue && (currentShowing == MINUTE_INDEX);
-        if (allowFineGrained) {
+        // Check if we have a minute interval
+        if (currentShowing == MINUTE_INDEX && mMinutesInterval != 1) {
+            degrees = snapValid(degrees);
+        } else if (allowFineGrained) {
             degrees = snapPrefer30s(degrees);
         } else {
             degrees = snapOnly30s(degrees, 0);
@@ -773,6 +800,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
      * Necessary for accessibility, to ensure we support "scrolling" forward and backward
      * in the circle.
      */
+    @TargetApi(14)
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         if (Build.VERSION.SDK_INT >= 14) {
             super.onInitializeAccessibilityNodeInfo(info);

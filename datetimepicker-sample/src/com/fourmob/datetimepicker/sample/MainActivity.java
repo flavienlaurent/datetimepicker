@@ -44,6 +44,8 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
             @Override
             public void onClick(View v) {
                 timePickerDialog.setVibrate(isVibrate());
+                // Default is to allow every minute to be selected.
+                timePickerDialog.setMinutesInterval(1);
                 timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
             }
         });

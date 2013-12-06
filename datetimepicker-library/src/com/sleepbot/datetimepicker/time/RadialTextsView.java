@@ -72,12 +72,17 @@ public class RadialTextsView extends View {
     ObjectAnimator mReappearAnimator;
     private InvalidateUpdateListener mInvalidateUpdateListener;
 
+    // Colors for text
+    private int numbersTextColor;
+    private int numbersDisabledTextColor;
+    private int[] textColors;
+    
     public RadialTextsView(Context context) {
         super(context);
         mIsInitialized = false;
     }
 
-    public void initialize(Resources res, String[] texts, String[] innerTexts,
+    public void initialize(Resources res, String[] texts, String[] innerTexts, boolean[] textEnabled,
                            boolean is24HourMode, boolean disappearsOut) {
         if (mIsInitialized) {
             Log.e(TAG, "This RadialTextsView may only be initialized once.");
@@ -85,8 +90,19 @@ public class RadialTextsView extends View {
         }
 
         // Set up the paint.
-        int numbersTextColor = res.getColor(R.color.numbers_text_color);
+        numbersTextColor = res.getColor(R.color.numbers_text_color);
+        numbersDisabledTextColor = res.getColor(R.color.numbers_disable_text_color);
         mPaint.setColor(numbersTextColor);
+        textColors = new int[12];
+        if (textEnabled != null) {
+            for (int i = 0 ; i < 12; i++) {
+                textColors[i] = textEnabled[i] ? numbersTextColor : numbersDisabledTextColor;
+            }
+        } else {
+            for (int i = 0 ; i < 12; i++) {
+                textColors[i] = numbersTextColor;
+            }
+        }
         String typefaceFamily = res.getString(R.string.radial_numbers_typeface);
         mTypefaceLight = Typeface.create(typefaceFamily, Typeface.NORMAL);
         String typefaceFamilyRegular = res.getString(R.string.sans_serif);
@@ -254,20 +270,15 @@ public class RadialTextsView extends View {
      */
     private void drawTexts(Canvas canvas, float textSize, Typeface typeface, String[] texts,
                            float[] textGridWidths, float[] textGridHeights) {
+        int[] widthIndices = {3,4,5,6,5,4,3,2,1,0,1,2};
+        int[] heightIndices = {0,1,2,3,4,5,6,5,4,3,2,1};
         mPaint.setTextSize(textSize);
         mPaint.setTypeface(typeface);
-        canvas.drawText(texts[0], textGridWidths[3], textGridHeights[0], mPaint);
-        canvas.drawText(texts[1], textGridWidths[4], textGridHeights[1], mPaint);
-        canvas.drawText(texts[2], textGridWidths[5], textGridHeights[2], mPaint);
-        canvas.drawText(texts[3], textGridWidths[6], textGridHeights[3], mPaint);
-        canvas.drawText(texts[4], textGridWidths[5], textGridHeights[4], mPaint);
-        canvas.drawText(texts[5], textGridWidths[4], textGridHeights[5], mPaint);
-        canvas.drawText(texts[6], textGridWidths[3], textGridHeights[6], mPaint);
-        canvas.drawText(texts[7], textGridWidths[2], textGridHeights[5], mPaint);
-        canvas.drawText(texts[8], textGridWidths[1], textGridHeights[4], mPaint);
-        canvas.drawText(texts[9], textGridWidths[0], textGridHeights[3], mPaint);
-        canvas.drawText(texts[10], textGridWidths[1], textGridHeights[2], mPaint);
-        canvas.drawText(texts[11], textGridWidths[2], textGridHeights[1], mPaint);
+        for (int i = 0 ; i < 12; i++) {
+            mPaint.setColor(textColors[i]);
+            canvas.drawText(texts[i], textGridWidths[widthIndices[i]], textGridHeights[heightIndices[i]], mPaint);
+        }
+        mPaint.setColor(numbersTextColor);
     }
 
     /**
