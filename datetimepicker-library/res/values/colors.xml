@@ -13,6 +13,7 @@
 
     <color name="ampm_text_color">#8c8c8c</color>
     <color name="numbers_text_color">#8c8c8c</color>
+    <color name="numbers_disable_text_color">#e3e3e3</color>
 
     <color name="transparent_black">#7F000000</color>
 </resources>
