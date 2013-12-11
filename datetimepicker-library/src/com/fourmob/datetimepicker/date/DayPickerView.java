@@ -67,7 +67,7 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
 			this.mSelectedDay.set(calendarDay);
 
 		this.mTempDay.set(calendarDay);
-		int monthIndex = 12 * (calendarDay.year - this.mController.getMinYear()) + calendarDay.month;
+		int monthIndex = 12 * (calendarDay.year - this.mController.getMinYear()) - this.mController.getStartMonth() + calendarDay.month;
 		postSetSelection(monthIndex);
 
 		// TODO improve

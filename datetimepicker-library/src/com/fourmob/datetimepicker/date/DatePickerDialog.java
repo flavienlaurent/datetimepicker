@@ -47,6 +47,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	private HashSet<OnDateChangedListener> mListeners = new HashSet<OnDateChangedListener>();
 	private int mMaxYear = MAX_YEAR;
 	private int mMinYear = MIN_YEAR;
+	private int mStartMonth = 0;
+	private int mStartDay = 1;
+	private int mEndMonth = 11;
+	private int mEndDay = 31;
 	private LinearLayout mMonthAndDayView;
 	private String mSelectDay;
 	private String mSelectYear;
@@ -66,6 +70,31 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		int day = Utils.getDaysInMonth(month, year);
 		if (currentDay > day)
 			this.mCalendar.set(Calendar.DAY_OF_MONTH, day);
+	}
+	
+	private void adjustDayAndMonthIfNeeded(int month, int year) {
+		
+		if (year == this.mMinYear) {
+			if (month < mStartMonth) {
+				this.mCalendar.set(Calendar.MONTH, this.mStartMonth);
+				this.mCalendar.set(Calendar.DAY_OF_MONTH, this.mStartDay);
+			}
+			if (month == mStartMonth && this.mCalendar.get(Calendar.DAY_OF_MONTH) < this.mStartDay) {
+				this.mCalendar.set(Calendar.DAY_OF_MONTH, this.mStartDay);
+			}
+		}
+		
+		if (year == this.mMaxYear) {
+			if (month > mEndMonth) {
+				this.mCalendar.set(Calendar.MONTH, this.mEndMonth);
+				this.mCalendar.set(Calendar.DAY_OF_MONTH, this.mEndDay);
+			}
+			if (month == mEndMonth && this.mCalendar.get(Calendar.DAY_OF_MONTH) > this.mEndDay) {
+				this.mCalendar.set(Calendar.DAY_OF_MONTH, this.mEndDay);
+			}
+		}
+		adjustDayInMonthIfNeeded(month, year);
+
 	}
 
     public DatePickerDialog() {
@@ -218,6 +247,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			this.mWeekStart = bundle.getInt("week_start");
 			this.mMinYear = bundle.getInt("year_start");
 			this.mMaxYear = bundle.getInt("year_end");
+			this.mStartMonth = bundle.getInt("month_start");
+			this.mEndMonth = bundle.getInt("month_end");
+			this.mStartDay = bundle.getInt("day_start");
+			this.mEndDay = bundle.getInt("day_end");
 			currentView = bundle.getInt("current_view");
 			listPosition = bundle.getInt("list_position");
 			listPositionOffset = bundle.getInt("list_position_offset");
@@ -279,6 +312,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		bundle.putInt("week_start", this.mWeekStart);
 		bundle.putInt("year_start", this.mMinYear);
 		bundle.putInt("year_end", this.mMaxYear);
+		bundle.putInt("month_start", this.mStartMonth);
+		bundle.putInt("month_end", this.mEndMonth);
+		bundle.putInt("day_start", this.mStartDay);
+		bundle.putInt("day_end", this.mEndDay);
 		bundle.putInt("current_view", this.mCurrentView);
 		int mostVisiblePosition = -1;
 		if (this.mCurrentView == 0)
@@ -292,7 +329,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	public void onYearSelected(int year) {
-		adjustDayInMonthIfNeeded(this.mCalendar.get(Calendar.MONTH), year);
+		adjustDayAndMonthIfNeeded(this.mCalendar.get(Calendar.MONTH), year);
 		this.mCalendar.set(Calendar.YEAR, year);
 		updatePickers();
 		setCurrentView(0);
@@ -327,7 +364,72 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		if (this.mDayPickerView != null)
 			this.mDayPickerView.onChange();
 	}
+	
+	
+	/**
+	 * Sets the start date for the DatePickerDialog.
+	 * 
+	 * @param startYear		The minimum year.
+	 * @param startMonth	The first valid month of the startYear. This must be a valid Calendar.Month. (0-11). Default is 0.
+	 * @param startDay		The first valid day of startMont (inclusive). Default is 1.
+	 */
+	public void setStartDate(int startYear, int startMonth, int startDay) {
+		setDateRange(startYear, startMonth, startDay, mMaxYear, mEndMonth, mEndDay);
+	}
+	
+	/**
+	 * Sets the end date for the DatePickerDialog.
+	 * 
+	 * @param endYear		The maximum year.
+	 * @param endMonth		The last valid month of the endYear. This must be a valid Calendar.Month. (0-11). Default is 11.
+	 * @param endDay		THe last valid day of endMonth (inclusive). Default is 31.
+	 */
+	public void setEndDate(int endYear, int endMonth, int endDay) {
+		setDateRange(mMinYear, mStartMonth, mStartDay, endYear, endMonth, endDay);
+	}
+	
+	/**
+	 * Sets the time period for the DatePickerDialog.
+	 * 
+	 * @param startYear		The minimum year.
+	 * @param startMonth	The first valid month of the startYear. This must be a valid Calendar.Month. (0-11). Default is 0.
+	 * @param startDay		The first valid day of startMont (inclusive). Default is 1.
+	 * @param endYear		The maximum year.
+	 * @param endMonth		The last valid month of the endYear. This must be a valid Calendar.Month. (0-11). Default is 11.
+	 * @param endDay		THe last valid day of endMonth (inclusive). Default is 31.
+	 */
+	public void setDateRange(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
+		setYearRange(startYear, endYear);
+		if (startMonth >= 12 || startMonth < 0)
+			throw new IllegalArgumentException("startMonth must be between 0-11");
+		if (endMonth >= 12 || endMonth < 0)
+			throw new IllegalArgumentException("endMonth must be between 0-11");
+		this.mStartMonth = startMonth;
+		this.mStartDay = startDay;
+		this.mEndMonth = endMonth;
+		this.mEndDay = endDay;
+	}
 
+	@Override
+	public int getStartMonth() {
+		return this.mStartMonth;
+	}
+
+	@Override
+	public int getEndMonth() {
+		return this.mEndMonth;
+	}
+
+	@Override
+	public int getStartDay() {
+		return this.mStartDay;
+	}
+
+	@Override
+	public int getEndDay() {
+		return this.mEndDay;
+	}
+	
 	public void tryVibrate() {
 		if (this.mVibrator != null && this.mVibrate) {
 			long timeInMillis = SystemClock.uptimeMillis();
@@ -345,4 +447,5 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	public static abstract interface OnDateSetListener {
 		public abstract void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day);
 	}
+	
 }
