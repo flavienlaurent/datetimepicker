@@ -8,6 +8,7 @@
     <color name="blue">#ff33b5e5</color>
     <color name="darker_blue">#ff0099cc</color>
     <color name="date_picker_text_normal">#ff999999</color>
+    <color name="date_picker_text_disabled">#ffcccccc</color>
     <color name="calendar_header">#ff999999</color>
     <color name="date_picker_view_animator">#fff2f2f2</color>
 

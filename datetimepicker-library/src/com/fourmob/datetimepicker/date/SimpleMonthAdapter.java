@@ -61,11 +61,19 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 		int selectedDay = -1;
 		if (isSelectedDayInMonth(year, month))
 			selectedDay = this.mSelectedDay.day;
+		int startDay = -1;
+		int endDay = 31;
+		if (this.mController.getStartMonth() == month && this.mController.getMinYear() == year)
+			startDay = this.mController.getStartDay();
+		if (this.mController.getEndMonth() == month && this.mController.getMaxYear() == year)
+			endDay = this.mController.getEndDay();
 		simpleMonthView.reuse();
 		monthParams.put("selected_day", Integer.valueOf(selectedDay));
 		monthParams.put("year", Integer.valueOf(year));
 		monthParams.put("month", Integer.valueOf(month));
 		monthParams.put("week_start", Integer.valueOf(this.mController.getFirstDayOfWeek()));
+		monthParams.put("start_day", Integer.valueOf(startDay));
+		monthParams.put("end_day", Integer.valueOf(endDay));
 		simpleMonthView.setMonthParams(monthParams);
 		simpleMonthView.invalidate();
 		return simpleMonthView;

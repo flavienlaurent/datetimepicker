@@ -353,8 +353,6 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	public void setYearRange(int minYear, int maxYear) {
-		if (maxYear <= minYear)
-			throw new IllegalArgumentException("Year end must be larger than year start");
 		if (maxYear > MAX_YEAR)
 			throw new IllegalArgumentException("max year end must < " + MAX_YEAR);
 		if (minYear < MIN_YEAR)
