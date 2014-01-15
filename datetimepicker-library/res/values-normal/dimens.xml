@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="selected_calendar_layout_height">160dip</dimen>
+    <dimen name="date_picker_view_animator_height">210.0dip</dimen>
+</resources>
