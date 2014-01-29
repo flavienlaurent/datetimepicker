@@ -36,6 +36,10 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
             public void onClick(View v) {
                 datePickerDialog.setVibrate(isVibrate());
                 datePickerDialog.setYearRange(1985, 2028);
+
+                // Alternatively, you can set the date range of the Date Picker
+                // datePickerDialog.setDateRange(startYear, startMonth, startDay, endYear, endMonth, endDay);
+
                 datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
             }
         });
