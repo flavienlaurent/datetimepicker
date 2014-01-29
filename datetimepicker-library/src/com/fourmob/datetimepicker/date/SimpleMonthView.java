@@ -63,6 +63,9 @@ public class SimpleMonthView extends View {
 	protected int mWeekStart = 1;
 	protected int mWidth;
 	protected int mYear;
+	protected int mDayDisabledTextColor;
+	protected int mStartDay;
+	protected int mEndDay;
 	private DateFormatSymbols mDateFormatSymbols = new DateFormatSymbols();
 
 	public SimpleMonthView(Context context) {
@@ -73,6 +76,7 @@ public class SimpleMonthView extends View {
 		this.mDayOfWeekTypeface = resources.getString(R.string.day_of_week_label_typeface);
 		this.mMonthTitleTypeface = resources.getString(R.string.sans_serif);
 		this.mDayTextColor = resources.getColor(R.color.date_picker_text_normal);
+		this.mDayDisabledTextColor = resources.getColor(R.color.date_picker_text_disabled);
 		this.mTodayNumberColor = resources.getColor(R.color.blue);
 		this.mMonthTitleColor = resources.getColor(R.color.white);
 		this.mMonthTitleBGColor = resources.getColor(R.color.circle_background);
@@ -149,8 +153,11 @@ public class SimpleMonthView extends View {
 			int x = paddingDay * (1 + dayOffset * 2) + this.mPadding;
 			if (this.mSelectedDay == day)
 				canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, DAY_SELECTED_CIRCLE_SIZE, this.mSelectedCirclePaint);
+
 			if ((this.mHasToday) && (this.mToday == day))
 				this.mMonthNumPaint.setColor(this.mTodayNumberColor);
+			else if (day < this.mStartDay || day > this.mEndDay)
+				this.mMonthNumPaint.setColor(this.mDayDisabledTextColor);
 			else
 				this.mMonthNumPaint.setColor(this.mDayTextColor);
 			canvas.drawText(String.format("%d", day), x, y, this.mMonthNumPaint);
@@ -171,7 +178,9 @@ public class SimpleMonthView extends View {
 
 		int yDay = (int) (y - MONTH_HEADER_SIZE) / this.mRowHeight;
 		int day = 1 + ((int) ((x - padding) * this.mNumDays / (this.mWidth - padding - this.mPadding)) - findDayOffset()) + yDay * this.mNumDays;
-
+		// If day out of range
+		if (day < this.mStartDay || day > this.mEndDay)
+			return null;
 		return new SimpleMonthAdapter.CalendarDay(this.mYear, this.mMonth, day);
 	}
 
@@ -254,6 +263,8 @@ public class SimpleMonthView extends View {
 			this.mSelectedDay = ((Integer) monthParams.get("selected_day")).intValue();
 		this.mMonth = ((Integer) monthParams.get("month")).intValue();
 		this.mYear = ((Integer) monthParams.get("year")).intValue();
+		this.mStartDay = ((Integer) monthParams.get("start_day")).intValue();
+		this.mEndDay = ((Integer) monthParams.get("end_day")).intValue();
 		Time time = new Time(Time.getCurrentTimezone());
 		time.setToNow();
 		this.mHasToday = false;
