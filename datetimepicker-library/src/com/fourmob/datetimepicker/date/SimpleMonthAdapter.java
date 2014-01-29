@@ -29,7 +29,8 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 	}
 
 	public int getCount() {
-		return 12 * (1 + (this.mController.getMaxYear() - this.mController.getMinYear()));
+		return 12 * (this.mController.getMaxYear() - this.mController.getMinYear()) 
+				+ this.mController.getEndMonth() - this.mController.getStartMonth() + 1;
 	}
 
 	public Object getItem(int position) {
@@ -54,17 +55,25 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 		if (monthParams == null)
 			monthParams = new HashMap<String, Integer>();
 		monthParams.clear();
-		int month = position % 12;
-		int year = position / 12 + this.mController.getMinYear();
+		int month = (position + this.mController.getStartMonth()) % 12;	
+		int year = (position + this.mController.getStartMonth()) / 12 + this.mController.getMinYear();
 		Log.d("SimpleMonthAdapter", "Year: " + year + ", Month: " + month);
 		int selectedDay = -1;
 		if (isSelectedDayInMonth(year, month))
 			selectedDay = this.mSelectedDay.day;
+		int startDay = -1;
+		int endDay = 31;
+		if (this.mController.getStartMonth() == month && this.mController.getMinYear() == year)
+			startDay = this.mController.getStartDay();
+		if (this.mController.getEndMonth() == month && this.mController.getMaxYear() == year)
+			endDay = this.mController.getEndDay();
 		simpleMonthView.reuse();
 		monthParams.put("selected_day", Integer.valueOf(selectedDay));
 		monthParams.put("year", Integer.valueOf(year));
 		monthParams.put("month", Integer.valueOf(month));
 		monthParams.put("week_start", Integer.valueOf(this.mController.getFirstDayOfWeek()));
+		monthParams.put("start_day", Integer.valueOf(startDay));
+		monthParams.put("end_day", Integer.valueOf(endDay));
 		simpleMonthView.setMonthParams(monthParams);
 		simpleMonthView.invalidate();
 		return simpleMonthView;
