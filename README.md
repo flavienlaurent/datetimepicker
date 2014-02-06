@@ -13,8 +13,9 @@ DateTimePicker is a library which contains the beautiful DatePicker and TimePick
 WARNING
 -------------------------
 
+* Requires android-support-v4 and [NineOldAndroids][5]
 * Accessibility is missing for DatePicker on all devices and Below ICS devices for TimePicker.
-* Scroll adjustment for DatePicker on all devices and Below ICS devices for TimePicker.
+* Scroll adjustment is missing for DatePicker on all devices and Below ICS devices for TimePicker.
 
 Description
 -------------------------
@@ -64,3 +65,4 @@ License
  [2]: https://raw.github.com/biboune/datetimepicker/master/datetimepicker-sample.apk
  [3]: https://github.com/biboune/datetimepicker/tree/master/datetimepicker-sample
  [4]: https://github.com/biboune/datetimepicker/blob/master/datetimepicker-sample/src/com/fourmob/datetimepicker/sample/MainActivity.java
+ [5]: http://nineoldandroids.com/
