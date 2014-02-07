@@ -56,7 +56,6 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 		monthParams.clear();
 		int month = position % 12;
 		int year = position / 12 + this.mController.getMinYear();
-		Log.d("SimpleMonthAdapter", "Year: " + year + ", Month: " + month);
 		int selectedDay = -1;
 		if (isSelectedDayInMonth(year, month))
 			selectedDay = this.mSelectedDay.day;
