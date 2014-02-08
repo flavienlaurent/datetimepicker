@@ -15,7 +15,7 @@ WARNING
 
 * Requires android-support-v4 and [NineOldAndroids][5]
 * Accessibility is missing for DatePicker on all devices and Below ICS devices for TimePicker.
-* Scroll adjustment is missing for DatePicker on all devices and Below ICS devices for TimePicker.
+* Scroll adjustment is missing below ICS devices for TimePicker and DatePicker.
 
 Description
 -------------------------
@@ -31,13 +31,16 @@ Or browse the [source code of the sample application][3] for a complete example 
 Including in your project
 -------------------------
 
-Just add the library to your application as a library project.
+Last version is 0.0.1
+
+Just add the following statement in your build.gradle
+
+    compile 'com.github.flavienlaurent.datetimepicker:library:VERSION'
 
 Usage
 ---------
 
 Using the library is simple, just look at the source code of the provided sample [here][4]
-
 
 Acknowledgements
 --------------------
