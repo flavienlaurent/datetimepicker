@@ -50,6 +50,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     public static final String KEY_CURRENT_VIEW = "current_view";
     public static final String KEY_LIST_POSITION = "list_position";
     public static final String KEY_LIST_POSITION_OFFSET = "list_position_offset";
+  public static final String KEY_MIN_DATE = "min_date";
+  public static final String KEY_MAX_DATE = "max_date";
 
     private static SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd", Locale.getDefault());
 	private static SimpleDateFormat YEAR_FORMAT = new SimpleDateFormat("yyyy", Locale.getDefault());
@@ -84,6 +86,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	private TextView mYearView;
 
     private boolean mVibrate = true;
+
+  private Calendar minDateCalendar;
+  private Calendar maxDateCalendar;
 
 	private void adjustDayInMonthIfNeeded(int month, int year) {
         int day = mCalendar.get(Calendar.DAY_OF_MONTH);
@@ -184,10 +189,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	private void updatePickers() {
-        Iterator<OnDateChangedListener> iterator = mListeners.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().onDateChanged();
-        }
+    for (OnDateChangedListener mListener : mListeners) {
+      mListener.onDateChanged();
+    }
 	}
 
 	public int getFirstDayOfWeek() {
@@ -195,12 +199,16 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	public int getMaxYear() {
-		return mMaxYear;
-	}
+    if (maxDateCalendar == null) {
+      return mMaxYear;
+    } else return maxDateCalendar.get(Calendar.YEAR) >= getMinYear() ? maxDateCalendar.get(Calendar.YEAR) : getMinYear();
+  }
 
 	public int getMinYear() {
-		return mMinYear;
-	}
+    if (minDateCalendar == null) {
+      return mMinYear;
+    } else return minDateCalendar.get(Calendar.YEAR);
+  }
 
 	public SimpleMonthAdapter.CalendarDay getSelectedDay() {
 		return new SimpleMonthAdapter.CalendarDay(mCalendar);
@@ -262,6 +270,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			currentView = bundle.getInt(KEY_CURRENT_VIEW);
 			listPosition = bundle.getInt(KEY_LIST_POSITION);
 			listPositionOffset = bundle.getInt(KEY_LIST_POSITION_OFFSET);
+
+      minDateCalendar = (Calendar)bundle.getSerializable(KEY_MIN_DATE);
+      maxDateCalendar = (Calendar)bundle.getSerializable(KEY_MAX_DATE);
 		}
 
 		Activity activity = getActivity();
@@ -330,6 +341,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		bundle.putInt(KEY_YEAR_END, mMaxYear);
 		bundle.putInt(KEY_CURRENT_VIEW, mCurrentView);
 
+    bundle.putSerializable(KEY_MIN_DATE, minDateCalendar);
+    bundle.putSerializable(KEY_MAX_DATE, maxDateCalendar);
+
 		int listPosition = -1;
 		if (mCurrentView == 0) {
 			listPosition = mDayPickerView.getMostVisiblePosition();
@@ -390,6 +404,39 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			}
 		}
 	}
+
+  @Override
+  public Calendar getMaxDate() {
+    return maxDateCalendar;
+  }
+
+  @Override
+  public Calendar getMinDate() {
+    return minDateCalendar;
+  }
+
+  public void setMinDate(long timeInMillisecond) {
+    if (minDateCalendar == null) {
+      minDateCalendar = Calendar.getInstance();
+    }
+
+    minDateCalendar.setTimeInMillis(timeInMillisecond);
+
+    mCalendar.set(Calendar.YEAR, minDateCalendar.get(Calendar.YEAR));
+    mCalendar.set(Calendar.MONTH, minDateCalendar.get(Calendar.MONTH));
+    mCalendar.set(Calendar.DAY_OF_MONTH, minDateCalendar.get(Calendar.DAY_OF_MONTH));
+  }
+
+  public void setMaxDate(long timeInMillisecond) {
+    if (maxDateCalendar == null) {
+      maxDateCalendar = Calendar.getInstance();
+    }
+
+    maxDateCalendar.setTimeInMillis(timeInMillisecond);
+
+    if (maxDateCalendar.before(minDateCalendar))
+      throw new IllegalArgumentException("The max year must be larger than the min year!");
+  }
 
 	static abstract interface OnDateChangedListener {
 		public abstract void onDateChanged();

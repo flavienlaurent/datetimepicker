@@ -1,5 +1,7 @@
 package com.fourmob.datetimepicker.date;
 
+import java.util.Calendar;
+
 abstract interface DatePickerController {
 	public abstract int getFirstDayOfWeek();
 
@@ -16,4 +18,8 @@ abstract interface DatePickerController {
 	public abstract void registerOnDateChangedListener(DatePickerDialog.OnDateChangedListener onDateChangedListener);
 
 	public abstract void tryVibrate();
+
+  public abstract Calendar getMaxDate();
+
+  public abstract Calendar getMinDate();
 }
