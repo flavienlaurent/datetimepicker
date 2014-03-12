@@ -1,23 +1,23 @@
 package com.fourmob.datetimepicker.sample;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.Toast;
-
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
-import java.util.Date;
 
-public class MainActivity extends FragmentActivity implements OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class MainActivity extends FragmentActivity implements OnDateSetListener, TimePickerDialog.OnTimeSetListener,
+    OnClickListener {
 
-    public static final String DATEPICKER_TAG = "datepicker";
+  public static final String DATEPICKER_TAG = "datepicker";
     public static final String TIMEPICKER_TAG = "timepicker";
 
     @Override
@@ -48,8 +48,10 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
             }
         });
 
-        if (savedInstanceState != null) {
-            DatePickerDialog dpd = (DatePickerDialog) getSupportFragmentManager().findFragmentByTag(DATEPICKER_TAG);
+      findViewById(R.id.minMaxDate).setOnClickListener(this);
+
+      if (savedInstanceState != null) {
+        DatePickerDialog dpd = (DatePickerDialog) getSupportFragmentManager().findFragmentByTag(DATEPICKER_TAG);
             if (dpd != null) {
                 dpd.setOnDateSetListener(this);
             }
@@ -74,4 +76,13 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
         Toast.makeText(MainActivity.this, "new time:" + hourOfDay + "-" + minute, Toast.LENGTH_LONG).show();
     }
+
+  @Override
+  public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.minMaxDate:
+        startActivity(new Intent(getBaseContext(), MinMaxDateActivity.class));
+        break;
+    }
+  }
 }
