@@ -176,7 +176,7 @@ public class SimpleMonthView extends View {
 
     if (lastInactiveDay != 0) {
       mMonthNumPaint.setColor(mInactiveNumberColor);
-      for (int i = 0; i < lastInactiveDay; i++) {
+      for (int i = 1; i < lastInactiveDay; i++) {
         int x = paddingDay * (1 + dayOffset * 2) + mPadding;
         canvas.drawText(String.format("%d", day), x, y, mMonthNumPaint);
 
@@ -189,7 +189,7 @@ public class SimpleMonthView extends View {
       }
     }
 
-    while (day <= (firstInactiveDay != 0 ? firstInactiveDay - 1 : mNumCells)) {
+    while (day <= (firstInactiveDay != 0 ? firstInactiveDay : mNumCells)) {
       int x = paddingDay * (1 + dayOffset * 2) + mPadding;
       if (mSelectedDay == day) {
 				canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, DAY_SELECTED_CIRCLE_SIZE, mSelectedCirclePaint);
@@ -212,7 +212,7 @@ public class SimpleMonthView extends View {
 
     if (firstInactiveDay != 0) {
       mMonthNumPaint.setColor(mInactiveNumberColor);
-      for (int i = firstInactiveDay; i <= mNumCells; i++) {
+      for (int i = firstInactiveDay; i < mNumCells; i++) {
         int x = paddingDay * (1 + dayOffset * 2) + mPadding;
         canvas.drawText(String.format("%d", day), x, y, mMonthNumPaint);
 
@@ -304,18 +304,18 @@ public class SimpleMonthView extends View {
             }
 
             if (lastInactiveDay != 0 && firstInactiveDay != 0) {
-              if (calendarDay.day > lastInactiveDay && calendarDay.day < firstInactiveDay) {
+              if (calendarDay.day >= lastInactiveDay && calendarDay.day <= firstInactiveDay) {
                 onDayClick(calendarDay);
               }
               return true;
             }
 
-            if (lastInactiveDay != 0 && calendarDay.day > lastInactiveDay) {
+            if (lastInactiveDay != 0 && calendarDay.day >= lastInactiveDay) {
               onDayClick(calendarDay);
               return true;
             }
 
-            if (firstInactiveDay != 0 && calendarDay.day < firstInactiveDay) {
+            if (firstInactiveDay != 0 && calendarDay.day <= firstInactiveDay) {
               onDayClick(calendarDay);
               return true;
             }

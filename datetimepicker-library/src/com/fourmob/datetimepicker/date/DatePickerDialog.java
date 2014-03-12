@@ -7,16 +7,11 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.fourmob.datetimepicker.R;
 import com.fourmob.datetimepicker.Utils;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -25,7 +20,6 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
 
 public class DatePickerDialog extends DialogFragment implements View.OnClickListener, DatePickerController {
@@ -102,7 +96,11 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
         // Empty constructor required for dialog fragment. DO NOT REMOVE
     }
 
-	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day) {
+  public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, Calendar calendar) {
+    return newInstance(onDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), true);
+  }
+
+  public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day) {
 		return newInstance(onDateSetListener, year, month, day, true);
 	}
 
@@ -438,7 +436,15 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
       throw new IllegalArgumentException("The max year must be larger than the min year!");
   }
 
-	static abstract interface OnDateChangedListener {
+  public void clearMinDate() {
+    minDateCalendar = null;
+  }
+
+  public void clearMaxDate() {
+    maxDateCalendar = null;
+  }
+
+  static abstract interface OnDateChangedListener {
 		public abstract void onDateChanged();
 	}
 
