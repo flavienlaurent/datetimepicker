@@ -25,6 +25,13 @@
         android:id="@+id/timeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Time" />
+        android:layout_marginBottom="30dp"
+        android:text="Select Time"/>
+
+    <Button
+            android:id="@+id/minMaxDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Min/Max Date"/>
 
 </LinearLayout>

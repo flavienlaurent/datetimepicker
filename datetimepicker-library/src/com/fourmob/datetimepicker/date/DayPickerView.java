@@ -9,6 +9,8 @@ import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import java.util.Calendar;
+
 public class DayPickerView extends ListView implements AbsListView.OnScrollListener, DatePickerDialog.OnDateChangedListener {
 
     protected static final int GOTO_SCROLL_DURATION = 250;
@@ -79,8 +81,15 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
         }
 
         mTempDay.set(day);
-        final int position = (day.year - mController.getMinYear())
+        int position = (day.year - mController.getMinYear())
                 * SimpleMonthAdapter.MONTHS_IN_YEAR + day.month;
+        if(mController.getMinDate() != null){
+          Calendar startCalendar = mController.getMinDate();
+          Calendar endCalendar = day.getCalendar();
+
+          int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+          position = diffYear * SimpleMonthAdapter.MONTHS_IN_YEAR + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+        }
 
         View child;
         int i = 0;
@@ -125,6 +134,11 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
 
 	public void init(Context paramContext) {
 		mContext = paramContext;
+
+    if (mController.getMinDate() != null){
+      mSelectedDay = mTempDay = new SimpleMonthAdapter.CalendarDay(mController.getMinDate().getTimeInMillis());
+    }
+
 		setUpListView();
 		setUpAdapter();
 		setAdapter(mAdapter);

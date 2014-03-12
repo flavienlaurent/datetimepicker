@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:gravity="center">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Select min Date"
+                android:gravity="center"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"/>
+        <Button
+                android:id="@+id/minDateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true" android:minWidth="150dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceMedium"
+                  android:text="Select max Date"
+                  android:gravity="center"
+                  android:layout_alignParentLeft="true"
+                  android:layout_centerInParent="true"/>
+        <Button
+                android:id="@+id/maxDateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true" android:minWidth="150dp"/>
+    </RelativeLayout>
+
+    <Button
+            android:id="@+id/showCalendarButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show a calendar"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true" android:minWidth="250dp"/>
+
+</LinearLayout>

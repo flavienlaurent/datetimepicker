@@ -16,30 +16,24 @@ package com.sleepbot.datetimepicker.time;
  */
 
 import android.app.ActionBar.LayoutParams;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.v4.app.DialogFragment;
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.method.TransformationMethod;
 import android.util.Log;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.fourmob.datetimepicker.R;
 import com.fourmob.datetimepicker.Utils;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -124,6 +118,15 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
 
     public TimePickerDialog() {
         // Empty constructor required for dialog fragment. DO NOT REMOVE
+    }
+
+    public static TimePickerDialog newInstance(OnTimeSetListener callback,
+                                             Calendar calendar, boolean is24HourMode) {
+        if (calendar == null){
+            calendar = Calendar.getInstance();
+        }
+
+    return newInstance(callback, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), is24HourMode, true);
     }
 
     public static TimePickerDialog newInstance(OnTimeSetListener callback,
@@ -371,6 +374,17 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
                 mTypedTimes.clear();
             }
             finishKbMode(true);
+        }
+    }
+
+    public void updateTime(Calendar calendar){
+      if (calendar != null) {
+          mInitialHourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+          mInitialMinute = calendar.get(Calendar.MINUTE);
+      }
+
+      if (mTimePicker != null) {
+            mTimePicker.setTime(mInitialHourOfDay, mInitialMinute);
         }
     }
 

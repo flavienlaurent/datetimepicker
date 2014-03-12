@@ -7,16 +7,11 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.fourmob.datetimepicker.R;
 import com.fourmob.datetimepicker.Utils;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -25,7 +20,6 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
 
 public class DatePickerDialog extends DialogFragment implements View.OnClickListener, DatePickerController {
@@ -50,6 +44,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     public static final String KEY_CURRENT_VIEW = "current_view";
     public static final String KEY_LIST_POSITION = "list_position";
     public static final String KEY_LIST_POSITION_OFFSET = "list_position_offset";
+  public static final String KEY_MIN_DATE = "min_date";
+  public static final String KEY_MAX_DATE = "max_date";
 
     private static SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd", Locale.getDefault());
 	private static SimpleDateFormat YEAR_FORMAT = new SimpleDateFormat("yyyy", Locale.getDefault());
@@ -85,6 +81,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
     private boolean mVibrate = true;
 
+  private Calendar minDateCalendar;
+  private Calendar maxDateCalendar;
+
 	private void adjustDayInMonthIfNeeded(int month, int year) {
         int day = mCalendar.get(Calendar.DAY_OF_MONTH);
         int daysInMonth = Utils.getDaysInMonth(month, year);
@@ -97,7 +96,11 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
         // Empty constructor required for dialog fragment. DO NOT REMOVE
     }
 
-	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day) {
+  public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, Calendar calendar) {
+    return newInstance(onDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), true);
+  }
+
+  public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day) {
 		return newInstance(onDateSetListener, year, month, day, true);
 	}
 
@@ -184,10 +187,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	private void updatePickers() {
-        Iterator<OnDateChangedListener> iterator = mListeners.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().onDateChanged();
-        }
+    for (OnDateChangedListener mListener : mListeners) {
+      mListener.onDateChanged();
+    }
 	}
 
 	public int getFirstDayOfWeek() {
@@ -195,12 +197,16 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	public int getMaxYear() {
-		return mMaxYear;
-	}
+    if (maxDateCalendar == null) {
+      return mMaxYear;
+    } else return maxDateCalendar.get(Calendar.YEAR) >= getMinYear() ? maxDateCalendar.get(Calendar.YEAR) : getMinYear();
+  }
 
 	public int getMinYear() {
-		return mMinYear;
-	}
+    if (minDateCalendar == null) {
+      return mMinYear;
+    } else return minDateCalendar.get(Calendar.YEAR);
+  }
 
 	public SimpleMonthAdapter.CalendarDay getSelectedDay() {
 		return new SimpleMonthAdapter.CalendarDay(mCalendar);
@@ -262,6 +268,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			currentView = bundle.getInt(KEY_CURRENT_VIEW);
 			listPosition = bundle.getInt(KEY_LIST_POSITION);
 			listPositionOffset = bundle.getInt(KEY_LIST_POSITION_OFFSET);
+
+      minDateCalendar = (Calendar)bundle.getSerializable(KEY_MIN_DATE);
+      maxDateCalendar = (Calendar)bundle.getSerializable(KEY_MAX_DATE);
 		}
 
 		Activity activity = getActivity();
@@ -330,6 +339,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		bundle.putInt(KEY_YEAR_END, mMaxYear);
 		bundle.putInt(KEY_CURRENT_VIEW, mCurrentView);
 
+    bundle.putSerializable(KEY_MIN_DATE, minDateCalendar);
+    bundle.putSerializable(KEY_MAX_DATE, maxDateCalendar);
+
 		int listPosition = -1;
 		if (mCurrentView == 0) {
 			listPosition = mDayPickerView.getMostVisiblePosition();
@@ -391,7 +403,48 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		}
 	}
 
-	static abstract interface OnDateChangedListener {
+  @Override
+  public Calendar getMaxDate() {
+    return maxDateCalendar;
+  }
+
+  @Override
+  public Calendar getMinDate() {
+    return minDateCalendar;
+  }
+
+  public void setMinDate(long timeInMillisecond) {
+    if (minDateCalendar == null) {
+      minDateCalendar = Calendar.getInstance();
+    }
+
+    minDateCalendar.setTimeInMillis(timeInMillisecond);
+
+    mCalendar.set(Calendar.YEAR, minDateCalendar.get(Calendar.YEAR));
+    mCalendar.set(Calendar.MONTH, minDateCalendar.get(Calendar.MONTH));
+    mCalendar.set(Calendar.DAY_OF_MONTH, minDateCalendar.get(Calendar.DAY_OF_MONTH));
+  }
+
+  public void setMaxDate(long timeInMillisecond) {
+    if (maxDateCalendar == null) {
+      maxDateCalendar = Calendar.getInstance();
+    }
+
+    maxDateCalendar.setTimeInMillis(timeInMillisecond);
+
+    if (maxDateCalendar.before(minDateCalendar))
+      throw new IllegalArgumentException("The max year must be larger than the min year!");
+  }
+
+  public void clearMinDate() {
+    minDateCalendar = null;
+  }
+
+  public void clearMaxDate() {
+    maxDateCalendar = null;
+  }
+
+  static abstract interface OnDateChangedListener {
 		public abstract void onDateChanged();
 	}
 

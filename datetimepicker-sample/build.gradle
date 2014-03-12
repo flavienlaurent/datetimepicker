@@ -5,7 +5,8 @@ repositories {
 }
 
 dependencies {
-	compile project(':datetimepicker-library')
+    compile 'com.android.support:support-v4:+'
+    compile project(':datetimepicker-library')
 }
 
 android {

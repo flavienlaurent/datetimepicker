@@ -1,11 +1,11 @@
 package com.fourmob.datetimepicker.date;
 
-import android.graphics.Paint.Align;
-import android.graphics.Paint.Style;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.text.format.DateUtils;
 import android.text.format.Time;
@@ -31,9 +31,11 @@ public class SimpleMonthView extends View {
     public static final String VIEW_PARAMS_NUM_DAYS = "num_days";
     public static final String VIEW_PARAMS_FOCUS_MONTH = "focus_month";
     public static final String VIEW_PARAMS_SHOW_WK_NUM = "show_wk_num";
+  public static final String VIEW_PARAMS_LAST_INACTIVE_DAY = "last_inactive_day";
+  public static final String VIEW_PARAMS_FIRST_INACTIVE_DAY = "first_inactive_day";
 
-    private static final int SELECTED_CIRCLE_ALPHA = 60;
-    protected static int DEFAULT_HEIGHT = 32;
+  private static final int SELECTED_CIRCLE_ALPHA = 60;
+  protected static int DEFAULT_HEIGHT = 32;
     protected static final int DEFAULT_NUM_ROWS = 6;
 	protected static int DAY_SELECTED_CIRCLE_SIZE;
 	protected static int DAY_SEPARATOR_WIDTH = 1;
@@ -58,12 +60,15 @@ public class SimpleMonthView extends View {
     protected int mMonthTitleBGColor;
     protected int mMonthTitleColor;
     protected int mTodayNumberColor;
+  protected int mInactiveNumberColor;
 
-    private final StringBuilder mStringBuilder;
-    private final Formatter mFormatter;
+  private final StringBuilder mStringBuilder;
+  private final Formatter mFormatter;
+  private int firstInactiveDay;
+  private int lastInactiveDay;
 
-    protected int mFirstJulianDay = -1;
-    protected int mFirstMonth = -1;
+  protected int mFirstJulianDay = -1;
+  protected int mFirstMonth = -1;
     protected int mLastMonth = -1;
     protected boolean mHasToday = false;
     protected int mSelectedDay = -1;
@@ -100,9 +105,10 @@ public class SimpleMonthView extends View {
 		mTodayNumberColor = resources.getColor(R.color.blue);
 		mMonthTitleColor = resources.getColor(R.color.white);
 		mMonthTitleBGColor = resources.getColor(R.color.circle_background);
+    mInactiveNumberColor = resources.getColor(R.color.inactive_numbers_text_color);
 
-		mStringBuilder = new StringBuilder(50);
-		mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
+    mStringBuilder = new StringBuilder(50);
+    mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
 
 		MINI_DAY_NUMBER_TEXT_SIZE = resources.getDimensionPixelSize(R.dimen.day_number_size);
 		MONTH_LABEL_TEXT_SIZE = resources.getDimensionPixelSize(R.dimen.month_label_size);
@@ -168,9 +174,24 @@ public class SimpleMonthView extends View {
 		int dayOffset = findDayOffset();
 		int day = 1;
 
-		while (day <= mNumCells) {
-			int x = paddingDay * (1 + dayOffset * 2) + mPadding;
-			if (mSelectedDay == day) {
+    if (lastInactiveDay != 0) {
+      mMonthNumPaint.setColor(mInactiveNumberColor);
+      for (int i = 1; i < lastInactiveDay; i++) {
+        int x = paddingDay * (1 + dayOffset * 2) + mPadding;
+        canvas.drawText(String.format("%d", day), x, y, mMonthNumPaint);
+
+        dayOffset++;
+        if (dayOffset == mNumDays) {
+          dayOffset = 0;
+          y += mRowHeight;
+        }
+        day++;
+      }
+    }
+
+    while (day <= (firstInactiveDay != 0 ? firstInactiveDay : mNumCells)) {
+      int x = paddingDay * (1 + dayOffset * 2) + mPadding;
+      if (mSelectedDay == day) {
 				canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, DAY_SELECTED_CIRCLE_SIZE, mSelectedCirclePaint);
             }
             if (mHasToday && (mToday == day)) {
@@ -188,9 +209,24 @@ public class SimpleMonthView extends View {
 			}
 			day++;
 		}
-	}
 
-	public SimpleMonthAdapter.CalendarDay getDayFromLocation(float x, float y) {
+    if (firstInactiveDay != 0) {
+      mMonthNumPaint.setColor(mInactiveNumberColor);
+      for (int i = firstInactiveDay; i < mNumCells; i++) {
+        int x = paddingDay * (1 + dayOffset * 2) + mPadding;
+        canvas.drawText(String.format("%d", day), x, y, mMonthNumPaint);
+
+        dayOffset++;
+        if (dayOffset == mNumDays) {
+          dayOffset = 0;
+          y += mRowHeight;
+        }
+        day++;
+      }
+    }
+  }
+
+  public SimpleMonthAdapter.CalendarDay getDayFromLocation(float x, float y) {
 		int padding = mPadding;
 		if ((x < padding) || (x > mWidth - mPadding)) {
 			return null;
@@ -261,9 +297,29 @@ public class SimpleMonthView extends View {
 	public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             SimpleMonthAdapter.CalendarDay calendarDay = getDayFromLocation(event.getX(), event.getY());
-            if (calendarDay != null) {
-                onDayClick(calendarDay);
+          if (calendarDay != null) {
+            if (lastInactiveDay == 0 && firstInactiveDay == 0) {
+              onDayClick(calendarDay);
+              return true;
             }
+
+            if (lastInactiveDay != 0 && firstInactiveDay != 0) {
+              if (calendarDay.day >= lastInactiveDay && calendarDay.day <= firstInactiveDay) {
+                onDayClick(calendarDay);
+              }
+              return true;
+            }
+
+            if (lastInactiveDay != 0 && calendarDay.day >= lastInactiveDay) {
+              onDayClick(calendarDay);
+              return true;
+            }
+
+            if (firstInactiveDay != 0 && calendarDay.day <= firstInactiveDay) {
+              onDayClick(calendarDay);
+              return true;
+            }
+          }
         }
         return true;
 	}
@@ -279,7 +335,19 @@ public class SimpleMonthView extends View {
         }
 		setTag(params);
 
-        if (params.containsKey(VIEW_PARAMS_HEIGHT)) {
+    if (params.containsKey(VIEW_PARAMS_LAST_INACTIVE_DAY)) {
+      lastInactiveDay = params.get(VIEW_PARAMS_LAST_INACTIVE_DAY);
+    } else {
+      lastInactiveDay = 0;
+    }
+
+    if (params.containsKey(VIEW_PARAMS_FIRST_INACTIVE_DAY)) {
+      firstInactiveDay = params.get(VIEW_PARAMS_FIRST_INACTIVE_DAY);
+    } else {
+      firstInactiveDay = 0;
+    }
+
+    if (params.containsKey(VIEW_PARAMS_HEIGHT)) {
             mRowHeight = params.get(VIEW_PARAMS_HEIGHT);
             if (mRowHeight < MIN_HEIGHT) {
                 mRowHeight = MIN_HEIGHT;
