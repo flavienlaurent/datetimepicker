@@ -9,5 +9,5 @@
         <View android:background="@color/line_background" android:layout_width="fill_parent" android:layout_height="1.0dip" />
         <include layout="@layout/date_picker_done_button" />
     </LinearLayout>
-    <include layout="@layout/date_picker_view_animator" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" />
+    <include layout="@layout/date_picker_view_animator" />
 </LinearLayout>
