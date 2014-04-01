@@ -84,8 +84,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	private TextView mYearView;
 
     private boolean mVibrate = true;
+    private boolean mCloseOnSingleTapDay;
 
-	private void adjustDayInMonthIfNeeded(int month, int year) {
+    private void adjustDayInMonthIfNeeded(int month, int year) {
         int day = mCalendar.get(Calendar.DAY_OF_MONTH);
         int daysInMonth = Utils.getDaysInMonth(month, year);
         if (day > daysInMonth) {
@@ -298,11 +299,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		mDoneButton = ((Button) view.findViewById(R.id.done));
 		mDoneButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				tryVibrate();
-				if (mCallBack != null) {
-					mCallBack.onDateSet(DatePickerDialog.this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
-                }
-                dismiss();
+                onDoneButtonClick();
 			}
 		});
 
@@ -320,12 +317,24 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		return view;
 	}
 
-	public void onDayOfMonthSelected(int year, int month, int day) {
+    private void onDoneButtonClick() {
+        tryVibrate();
+        if (mCallBack != null) {
+            mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+}
+        dismiss();
+    }
+
+    public void onDayOfMonthSelected(int year, int month, int day) {
 		mCalendar.set(Calendar.YEAR, year);
 		mCalendar.set(Calendar.MONTH, month);
 		mCalendar.set(Calendar.DAY_OF_MONTH, day);
 		updatePickers();
 		updateDisplay(true);
+
+        if(mCloseOnSingleTapDay) {
+            onDoneButtonClick();
+        }
 	}
 
 	public void onSaveInstanceState(Bundle bundle) {
@@ -399,7 +408,11 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		}
 	}
 
-	static abstract interface OnDateChangedListener {
+    public void setCloseOnSingleTapDay(boolean closeOnSingleTapDay) {
+        mCloseOnSingleTapDay = closeOnSingleTapDay;
+    }
+
+    static abstract interface OnDateChangedListener {
 		public abstract void onDateChanged();
 	}
 

@@ -19,7 +19,6 @@ import android.app.ActionBar.LayoutParams;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.app.DialogFragment;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.method.TransformationMethod;
@@ -107,6 +106,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
 
     // Enable/Disable Vibrations
     private boolean mVibrate = true;
+    private boolean mCloseOnSingleTapMinute;
 
     /**
      * The callback interface used to indicate the user is done filling in
@@ -163,6 +163,10 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         mVibrate = vibrate;
         if (mTimePicker != null)
             mTimePicker.setVibrate(vibrate);
+    }
+
+    public void setCloseOnSingleTapMinute(boolean closeOnSingleTapMinute) {
+        mCloseOnSingleTapMinute = closeOnSingleTapMinute;
     }
 
     @Override
@@ -256,16 +260,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         mDoneButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mInKbMode && isTypedTimeFullyLegal()) {
-                    finishKbMode(false);
-                } else {
-                    mTimePicker.tryVibrate();
-                }
-                if (mCallback != null) {
-                    mCallback.onTimeSet(mTimePicker,
-                            mTimePicker.getHours(), mTimePicker.getMinutes());
-                }
-                dismiss();
+                onDoneButtonClick();
             }
         });
         mDoneButton.setOnKeyListener(keyboardListener);
@@ -320,6 +315,19 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         return view;
     }
 
+    private void onDoneButtonClick() {
+        if (mInKbMode && isTypedTimeFullyLegal()) {
+            finishKbMode(false);
+        } else {
+            mTimePicker.tryVibrate();
+        }
+        if (mCallback != null) {
+            mCallback.onTimeSet(mTimePicker,
+                    mTimePicker.getHours(), mTimePicker.getMinutes());
+        }
+        dismiss();
+    }
+
     private void updateAmPmDisplay(int amOrPm) {
         if (amOrPm == AM) {
             mAmPmTextView.setText(mAmText);
@@ -364,6 +372,9 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             Utils.tryAccessibilityAnnounce(mTimePicker, announcement);
         } else if (pickerIndex == MINUTE_INDEX) {
             setMinute(newValue);
+            if(mCloseOnSingleTapMinute) {
+                onDoneButtonClick();
+            }
         } else if (pickerIndex == AMPM_INDEX) {
             updateAmPmDisplay(newValue);
         } else if (pickerIndex == ENABLE_PICKER_INDEX) {

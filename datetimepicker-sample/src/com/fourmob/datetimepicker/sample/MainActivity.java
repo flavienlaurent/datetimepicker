@@ -13,7 +13,6 @@ import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends FragmentActivity implements OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -36,6 +35,7 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
             public void onClick(View v) {
                 datePickerDialog.setVibrate(isVibrate());
                 datePickerDialog.setYearRange(1985, 2028);
+                datePickerDialog.setCloseOnSingleTapDay(isCloseOnSingleTapDay());
                 datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
             }
         });
@@ -44,6 +44,7 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
             @Override
             public void onClick(View v) {
                 timePickerDialog.setVibrate(isVibrate());
+                timePickerDialog.setCloseOnSingleTapMinute(isCloseOnSingleTapMinute());
                 timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
             }
         });
@@ -63,6 +64,14 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
 
     private boolean isVibrate() {
         return ((CheckBox) findViewById(R.id.checkBoxVibrate)).isChecked();
+    }
+
+    private boolean isCloseOnSingleTapDay() {
+        return ((CheckBox) findViewById(R.id.checkBoxCloseOnSingleTapDay)).isChecked();
+    }
+
+    private boolean isCloseOnSingleTapMinute() {
+        return ((CheckBox) findViewById(R.id.checkBoxCloseOnSingleTapMinute)).isChecked();
     }
 
     @Override
