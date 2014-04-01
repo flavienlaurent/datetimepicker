@@ -53,7 +53,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
     private static SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd", Locale.getDefault());
 	private static SimpleDateFormat YEAR_FORMAT = new SimpleDateFormat("yyyy", Locale.getDefault());
-    private DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+    private DateFormatSymbols mDateFormatSymbols = new DateFormatSymbols();
 
 	private final Calendar mCalendar = Calendar.getInstance();
     private HashSet<OnDateChangedListener> mListeners = new HashSet<OnDateChangedListener>();
@@ -159,13 +159,21 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	private void updateDisplay(boolean announce) {
-        if (mDayOfWeekView != null) {
+        /*if (mDayOfWeekView != null) {
             mDayOfWeekView.setText(mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG,
                     Locale.getDefault()).toUpperCase(Locale.getDefault()));
         }
 
         mSelectedMonthTextView.setText(mCalendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,
-                Locale.getDefault()).toUpperCase(Locale.getDefault()));
+                Locale.getDefault()).toUpperCase(Locale.getDefault()));*/
+
+        if (this.mDayOfWeekView != null){
+            this.mCalendar.setFirstDayOfWeek(mWeekStart);
+            this.mDayOfWeekView.setText(mDateFormatSymbols.getWeekdays()[this.mCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()));
+        }
+
+        this.mSelectedMonthTextView.setText(mDateFormatSymbols.getMonths()[this.mCalendar.get(Calendar.MONTH)].toUpperCase(Locale.getDefault()));
+
         mSelectedDayTextView.setText(DAY_FORMAT.format(mCalendar.getTime()));
         mYearView.setText(YEAR_FORMAT.format(mCalendar.getTime()));
 
