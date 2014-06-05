@@ -76,7 +76,8 @@ public class MainActivity extends FragmentActivity implements OnDateSetListener,
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        Toast.makeText(MainActivity.this, "new date:" + year + "-" + month + "-" + day, Toast.LENGTH_LONG).show();
+
+        Toast.makeText(MainActivity.this, "new date:" + year + "-" + month +1+ "-" + day, Toast.LENGTH_LONG).show();
     }
 
     @Override
