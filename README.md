@@ -29,7 +29,7 @@ Or browse the [source code of the sample application][3] for a complete example 
 
 ## Including in your project
 
-Last version is 0.0.1
+Last version is 0.0.2
 
 Just add the following statement in your build.gradle
 
