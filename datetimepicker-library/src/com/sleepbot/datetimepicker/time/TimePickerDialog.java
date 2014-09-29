@@ -357,6 +357,18 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         }
     }
 
+    @Override
+    public void onValueSelected(int pickerIndex, int newValue, boolean autoAdvance, boolean isUp) {
+        if (pickerIndex == MINUTE_INDEX) {
+            setMinute(newValue);
+            if (mCloseOnSingleTapMinute && isUp) {
+                onDoneButtonClick();
+            }
+        } else {
+            onValueSelected(pickerIndex, newValue, autoAdvance);
+        }
+    }
+
     /**
      * Called by the picker for updating the header display.
      */
@@ -372,9 +384,9 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             Utils.tryAccessibilityAnnounce(mTimePicker, announcement);
         } else if (pickerIndex == MINUTE_INDEX) {
             setMinute(newValue);
-            if(mCloseOnSingleTapMinute) {
-                onDoneButtonClick();
-            }
+//            if (mCloseOnSingleTapMinute) {
+//                onDoneButtonClick();
+//            }
         } else if (pickerIndex == AMPM_INDEX) {
             updateAmPmDisplay(newValue);
         } else if (pickerIndex == ENABLE_PICKER_INDEX) {

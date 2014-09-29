@@ -96,6 +96,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
 
     public interface OnValueSelectedListener {
         void onValueSelected(int pickerIndex, int newValue, boolean autoAdvance);
+        void onValueSelected(int pickerIndex, int newValue, boolean autoAdvance, boolean isUp);
     }
 
     public RadialPickerLayout(Context context, AttributeSet attrs) {
@@ -729,7 +730,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
                             }
                         }
                         setValueForItem(getCurrentItemShowing(), value);
-                        mListener.onValueSelected(getCurrentItemShowing(), value, true);
+                        mListener.onValueSelected(getCurrentItemShowing(), value, true, true);
                     }
                 }
                 mDoingMove = false;

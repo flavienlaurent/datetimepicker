@@ -67,6 +67,7 @@ public class Utils {
         }
     }
 
+    @SuppressLint("NewApi")
     public static boolean isTouchExplorationEnabled(AccessibilityManager accessibilityManager) {
         if (Build.VERSION.SDK_INT >= 14) {
             return accessibilityManager.isTouchExplorationEnabled();

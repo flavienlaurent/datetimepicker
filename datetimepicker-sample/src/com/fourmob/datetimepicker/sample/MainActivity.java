@@ -1,5 +1,7 @@
 package com.fourmob.datetimepicker.sample;
 
+import java.util.Calendar;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -12,7 +14,6 @@ import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
-import java.util.Calendar;
 
 public class MainActivity extends FragmentActivity implements OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
