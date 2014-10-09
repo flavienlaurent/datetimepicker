@@ -190,7 +190,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
 
         View view = inflater.inflate(R.layout.time_picker_dialog, null);
         KeyboardListener keyboardListener = new KeyboardListener();
-        view.findViewById(R.id.time_picker_dialog).setOnKeyListener(keyboardListener);
+        view.setOnKeyListener(keyboardListener);
 
         Resources res = getResources();
         mHourPickerDescription = res.getString(R.string.hour_picker_description);
