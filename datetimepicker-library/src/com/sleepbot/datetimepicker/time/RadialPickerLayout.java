@@ -530,8 +530,9 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
             return;
         }
         
-        //NineOldDroids does not work in this case due to denepency recursion. 
-        animate = animate && Build.VERSION.SDK_INT >= 14; 
+        //NineOldDroids does not work in this case due to dependency recursion.
+        //Don't animate on API 14
+        animate = animate && Build.VERSION.SDK_INT > 14;
 
         int lastIndex = getCurrentItemShowing();
         mCurrentItemShowing = index;
