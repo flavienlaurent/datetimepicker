@@ -225,3 +225,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+datetimepicker-library/libs/
+datetimepicker-sample/libs/
