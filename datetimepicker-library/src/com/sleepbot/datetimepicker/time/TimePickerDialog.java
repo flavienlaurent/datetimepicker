@@ -372,7 +372,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             Utils.tryAccessibilityAnnounce(mTimePicker, announcement);
         } else if (pickerIndex == MINUTE_INDEX) {
             setMinute(newValue);
-            if(mCloseOnSingleTapMinute) {
+            if(mCloseOnSingleTapMinute && autoAdvance) {
                 onDoneButtonClick();
             }
         } else if (pickerIndex == AMPM_INDEX) {
