@@ -18,7 +18,7 @@
     <dimen name="year_label_height">64dip</dimen>
     <dimen name="year_label_text_size">22dip</dimen>
 
-    <dimen name="time_label_size">60sp</dimen>
+    <dimen name="time_label_size">60dip</dimen>
     <dimen name="extra_time_label_margin">-30dp</dimen>
     <dimen name="ampm_label_size">16sp</dimen>
     <dimen name="ampm_left_padding">6dip</dimen>
