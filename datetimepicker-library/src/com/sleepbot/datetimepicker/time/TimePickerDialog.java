@@ -233,6 +233,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         mTimePicker.setOnValueSelectedListener(this);
         mTimePicker.setOnKeyListener(keyboardListener);
         mTimePicker.initialize(getActivity(), mInitialHourOfDay, mInitialMinute, mIs24HourMode, mVibrate);
+        mTimePicker.setTag(this.getTag());
         int currentItemShowing = HOUR_INDEX;
         if (savedInstanceState != null &&
                 savedInstanceState.containsKey(KEY_CURRENT_ITEM_SHOWING)) {
