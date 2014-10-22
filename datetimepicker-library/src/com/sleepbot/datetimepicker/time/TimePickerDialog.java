@@ -233,6 +233,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         mTimePicker.setOnValueSelectedListener(this);
         mTimePicker.setOnKeyListener(keyboardListener);
         mTimePicker.initialize(getActivity(), mInitialHourOfDay, mInitialMinute, mIs24HourMode, mVibrate);
+        mTimePicker.setTag(this.getTag());
         int currentItemShowing = HOUR_INDEX;
         if (savedInstanceState != null &&
                 savedInstanceState.containsKey(KEY_CURRENT_ITEM_SHOWING)) {
@@ -322,7 +323,6 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             mTimePicker.tryVibrate();
         }
         if (mCallback != null) {
-            mTimePicker.setTag(this.getTag());
             mCallback.onTimeSet(mTimePicker,
                     mTimePicker.getHours(), mTimePicker.getMinutes());
         }
@@ -478,7 +478,6 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
                 finishKbMode(false);
             }
             if (mCallback != null) {
-                mTimePicker.setTag(this.getTag());
                 mCallback.onTimeSet(mTimePicker,
                         mTimePicker.getHours(), mTimePicker.getMinutes());
             }
