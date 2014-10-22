@@ -322,6 +322,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             mTimePicker.tryVibrate();
         }
         if (mCallback != null) {
+            mTimePicker.setTag(this.getTag());
             mCallback.onTimeSet(mTimePicker,
                     mTimePicker.getHours(), mTimePicker.getMinutes());
         }
@@ -477,6 +478,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
                 finishKbMode(false);
             }
             if (mCallback != null) {
+                mTimePicker.setTag(this.getTag());
                 mCallback.onTimeSet(mTimePicker,
                         mTimePicker.getHours(), mTimePicker.getMinutes());
             }
