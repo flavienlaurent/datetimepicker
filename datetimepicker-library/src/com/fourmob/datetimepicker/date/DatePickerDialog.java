@@ -76,7 +76,6 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
 	private TextView mDayOfWeekView;
 	private DayPickerView mDayPickerView;
-	private Button mDoneButton;
 	private LinearLayout mMonthAndDayView;
 	private TextView mSelectedDayTextView;
 	private TextView mSelectedMonthTextView;
@@ -297,12 +296,19 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		outAlphaAnimation.setDuration(300L);
 		mAnimator.setOutAnimation(outAlphaAnimation);
 
-		mDoneButton = ((Button) view.findViewById(R.id.done));
-		mDoneButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
+		Button doneButton = ((Button) view.findViewById(R.id.done));
+        Button cancelButton = ((Button) view.findViewById(R.id.cancel));
+		doneButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 onDoneButtonClick();
-			}
-		});
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
 		updateDisplay(false);
 		setCurrentView(currentView, true);
@@ -322,7 +328,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
         tryVibrate();
         if (mCallBack != null) {
             mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
-}
+        }
         dismiss();
     }
 
