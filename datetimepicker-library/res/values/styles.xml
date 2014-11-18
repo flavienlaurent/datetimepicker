@@ -27,4 +27,16 @@
     </style>
 
     <style name="day_of_week_label_condensed" />
+
+    <style name="button_bar_button">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">36dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:paddingBottom">8dip</item>
+        <item name="android:paddingLeft">8dip</item>
+        <item name="android:paddingTop">8dip</item>
+        <item name="android:paddingRight">8dip</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="button_bar_button" parent="@android:style/Widget.Holo.Button.Borderless">
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">36dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:paddingBottom">8dip</item>
+        <item name="android:paddingTop">8dip</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

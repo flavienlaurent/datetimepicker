@@ -6,7 +6,6 @@
             <include layout="@layout/date_picker_header_view" />
             <include layout="@layout/date_picker_selected_date" />
         </LinearLayout>
-        <View android:background="@color/line_background" android:layout_width="fill_parent" android:layout_height="1.0dip" />
         <include layout="@layout/date_picker_done_button" />
     </LinearLayout>
     <include layout="@layout/date_picker_view_animator" />

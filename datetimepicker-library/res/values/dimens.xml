@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="done_label_size">14sp</dimen>
+    <dimen name="done_button_panel_height">48dip</dimen>
     <dimen name="date_picker_component_width">270dip</dimen>
     <dimen name="date_picker_header_height">30dip</dimen>
     <dimen name="selected_calendar_layout_height">155dip</dimen>
@@ -27,6 +28,8 @@
     <dimen name="picker_dimen">270dip</dimen>
     <dimen name="minimum_margin_sides">48dip</dimen>
     <dimen name="minimum_margin_top_bottom">24dip</dimen>
+
+    <dimen name="view_margin_medium">8dip</dimen>
 
     <item name="circle_radius_multiplier" format="float" type="string">0.82</item>
     <item name="circle_radius_multiplier_24HourMode" format="float" type="string">0.85</item>

@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="@dimen/date_picker_component_width"
     android:layout_height="wrap_content"
+    android:padding="@dimen/view_margin_medium"
     style="?android:attr/buttonBarStyle">
 
     <Button
         android:textSize="@dimen/done_label_size"
         android:textColor="@color/done_text_color"
-        android:id="@id/done"
-        android:layout_width="fill_parent"
+        android:id="@id/cancel"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="48dip"
+        android:layout_margin="@dimen/view_margin_medium"
+        android:text="@string/cancel_label"
+        android:layout_toStartOf="@id/done"
+        android:layout_toLeftOf="@id/done"
+        style="@style/button_bar_button" />
+
+    <Button
+        android:textSize="@dimen/done_label_size"
+        android:textColor="@color/done_text_color"
+        android:id="@id/done"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/view_margin_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/done_label"
-        style="?android:attr/buttonBarButtonStyle" />
-</LinearLayout>
+        style="@style/button_bar_button" />
+</RelativeLayout>
