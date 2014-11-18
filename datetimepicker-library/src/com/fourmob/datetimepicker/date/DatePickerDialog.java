@@ -173,7 +173,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
             this.mDayOfWeekView.setText(mDateFormatSymbols.getWeekdays()[this.mCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()));
         }
 
-        this.mSelectedMonthTextView.setText(mDateFormatSymbols.getMonths()[this.mCalendar.get(Calendar.MONTH)].toUpperCase(Locale.getDefault()));
+        this.mSelectedMonthTextView.setText(mDateFormatSymbols.getShortMonths()[this.mCalendar.get(Calendar.MONTH)].toUpperCase(Locale.getDefault()));
 
         mSelectedDayTextView.setText(DAY_FORMAT.format(mCalendar.getTime()));
         mYearView.setText(YEAR_FORMAT.format(mCalendar.getTime()));
