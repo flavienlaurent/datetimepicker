@@ -78,8 +78,8 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
     private View mAmPmHitspace;
     private RadialPickerLayout mTimePicker;
 
-    private int mBlue;
-    private int mBlack;
+    private int mWhite;
+    private int mUnfocusedWhite;
     private String mAmText;
     private String mPmText;
 
@@ -197,8 +197,8 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
         mSelectHours = res.getString(R.string.select_hours);
         mMinutePickerDescription = res.getString(R.string.minute_picker_description);
         mSelectMinutes = res.getString(R.string.select_minutes);
-        mBlue = res.getColor(R.color.blue);
-        mBlack = res.getColor(R.color.numbers_text_color);
+        mWhite = res.getColor(R.color.white);
+        mUnfocusedWhite = res.getColor(R.color.transparent_white);
 
         mHourView = (TextView) view.findViewById(R.id.hours);
         mHourView.setOnKeyListener(keyboardListener);
@@ -440,8 +440,8 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             labelToAnimate = mMinuteView;
         }
 
-        int hourColor = (index == HOUR_INDEX) ? mBlue : mBlack;
-        int minuteColor = (index == MINUTE_INDEX) ? mBlue : mBlack;
+        int hourColor = (index == HOUR_INDEX) ? mWhite : mUnfocusedWhite;
+        int minuteColor = (index == MINUTE_INDEX) ? mWhite : mUnfocusedWhite;
         mHourView.setTextColor(hourColor);
         mMinuteView.setTextColor(minuteColor);
 
@@ -661,10 +661,10 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
                     String.format(minuteFormat, values[1]).replace(' ', mPlaceholderText);
             mHourView.setText(hourStr);
             mHourSpaceView.setText(hourStr);
-            mHourView.setTextColor(mBlack);
+            mHourView.setTextColor(mUnfocusedWhite);
             mMinuteView.setText(minuteStr);
             mMinuteSpaceView.setText(minuteStr);
-            mMinuteView.setTextColor(mBlack);
+            mMinuteView.setTextColor(mUnfocusedWhite);
             if (!mIs24HourMode) {
                 updateAmPmDisplay(values[2]);
             }

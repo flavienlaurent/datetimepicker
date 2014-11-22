@@ -17,12 +17,12 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="time_label">
         <item name="android:textSize">@dimen/time_label_size</item>
-        <item name="android:textColor">@color/numbers_text_color</item>
+        <item name="android:textColor">@color/transparent_white</item>
     </style>
 
     <style name="ampm_label">
         <item name="android:textSize">@dimen/ampm_label_size</item>
-        <item name="android:textColor">@color/ampm_text_color</item>
+        <item name="android:textColor">@color/transparent_white</item>
         <item name="android:textStyle">bold</item>
     </style>
 
