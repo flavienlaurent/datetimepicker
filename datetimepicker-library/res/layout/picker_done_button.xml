@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="@dimen/date_picker_component_width"
     android:layout_height="wrap_content"
+    android:background="@color/circle_background"
     android:padding="@dimen/view_margin_medium"
     style="?android:attr/buttonBarStyle">
 
