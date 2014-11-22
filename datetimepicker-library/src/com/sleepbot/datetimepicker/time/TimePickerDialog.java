@@ -264,6 +264,13 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
             }
         });
         mDoneButton.setOnKeyListener(keyboardListener);
+        
+        view.findViewById(R.id.cancel_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         // Enable or disable the AM/PM view.
         mAmPmHitspace = view.findViewById(R.id.ampm_hitspace);
