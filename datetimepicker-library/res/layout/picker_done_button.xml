@@ -10,19 +10,19 @@
     <Button
         android:textSize="@dimen/done_label_size"
         android:textColor="@color/done_text_color"
-        android:id="@id/cancel"
+        android:id="@id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/view_margin_medium"
         android:text="@string/cancel_label"
-        android:layout_toStartOf="@id/done"
-        android:layout_toLeftOf="@id/done"
+        android:layout_toStartOf="@id/done_button"
+        android:layout_toLeftOf="@id/done_button"
         style="@style/button_bar_button" />
 
     <Button
         android:textSize="@dimen/done_label_size"
         android:textColor="@color/done_text_color"
-        android:id="@id/done"
+        android:id="@id/done_button"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/view_margin_medium"

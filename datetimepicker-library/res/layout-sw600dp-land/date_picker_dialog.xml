@@ -8,5 +8,5 @@
         </LinearLayout>
         <include layout="@layout/date_picker_view_animator" />
     </LinearLayout>
-    <include layout="@layout/date_picker_done_button" />
+    <include layout="@layout/picker_done_button" />
 </LinearLayout>
