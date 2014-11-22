@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="done_label_size">14sp</dimen>
+    <dimen name="done_button_panel_height">48dip</dimen>
     <dimen name="date_picker_component_width">270dip</dimen>
     <dimen name="date_picker_header_height">30dip</dimen>
     <dimen name="selected_calendar_layout_height">155dip</dimen>
     <dimen name="date_picker_view_animator_height">270dip</dimen>
     <dimen name="month_list_item_header_height">50dip</dimen>
-    <dimen name="month_day_label_text_size">10sp</dimen>
+    <dimen name="month_day_label_text_size">12sp</dimen>
     <dimen name="day_number_select_circle_radius">16dip</dimen>
     <dimen name="month_select_circle_radius">45dip</dimen>
     <dimen name="selected_date_year_size">30dip</dimen>
@@ -14,7 +15,7 @@
     <dimen name="selected_date_month_size">30dip</dimen>
     <dimen name="date_picker_header_text_size">14dip</dimen>
     <dimen name="month_label_size">16sp</dimen>
-    <dimen name="day_number_size">16sp</dimen>
+    <dimen name="day_number_size">12sp</dimen>
     <dimen name="year_label_height">64dip</dimen>
     <dimen name="year_label_text_size">22dip</dimen>
 
@@ -27,6 +28,8 @@
     <dimen name="picker_dimen">270dip</dimen>
     <dimen name="minimum_margin_sides">48dip</dimen>
     <dimen name="minimum_margin_top_bottom">24dip</dimen>
+
+    <dimen name="view_margin_medium">8dip</dimen>
 
     <item name="circle_radius_multiplier" format="float" type="string">0.82</item>
     <item name="circle_radius_multiplier_24HourMode" format="float" type="string">0.85</item>

@@ -1,6 +1,7 @@
 package com.fourmob.datetimepicker.date;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -75,7 +76,6 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
 	private TextView mDayOfWeekView;
 	private DayPickerView mDayPickerView;
-	private Button mDoneButton;
 	private LinearLayout mMonthAndDayView;
 	private TextView mSelectedDayTextView;
 	private TextView mSelectedMonthTextView;
@@ -173,7 +173,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
             this.mDayOfWeekView.setText(mDateFormatSymbols.getWeekdays()[this.mCalendar.get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault()));
         }
 
-        this.mSelectedMonthTextView.setText(mDateFormatSymbols.getMonths()[this.mCalendar.get(Calendar.MONTH)].toUpperCase(Locale.getDefault()));
+        this.mSelectedMonthTextView.setText(mDateFormatSymbols.getShortMonths()[this.mCalendar.get(Calendar.MONTH)].toUpperCase(Locale.getDefault()));
 
         mSelectedDayTextView.setText(DAY_FORMAT.format(mCalendar.getTime()));
         mYearView.setText(YEAR_FORMAT.format(mCalendar.getTime()));
@@ -239,7 +239,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		super.onCreate(bundle);
 		Activity activity = getActivity();
 		activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		mVibrator = ((Vibrator) activity.getSystemService("vibrator"));
+		mVibrator = ((Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE));
 		if (bundle != null) {
 			mCalendar.set(Calendar.YEAR, bundle.getInt(KEY_SELECTED_YEAR));
 			mCalendar.set(Calendar.MONTH, bundle.getInt(KEY_SELECTED_MONTH));
@@ -296,12 +296,19 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		outAlphaAnimation.setDuration(300L);
 		mAnimator.setOutAnimation(outAlphaAnimation);
 
-		mDoneButton = ((Button) view.findViewById(R.id.done));
-		mDoneButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
+		Button doneButton = ((Button) view.findViewById(R.id.done_button));
+        Button cancelButton = ((Button) view.findViewById(R.id.cancel_button));
+		doneButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 onDoneButtonClick();
-			}
-		});
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
 		updateDisplay(false);
 		setCurrentView(currentView, true);
@@ -321,7 +328,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
         tryVibrate();
         if (mCallBack != null) {
             mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
-}
+        }
         dismiss();
     }
 

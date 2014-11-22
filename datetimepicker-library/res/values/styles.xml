@@ -17,14 +17,26 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="time_label">
         <item name="android:textSize">@dimen/time_label_size</item>
-        <item name="android:textColor">@color/numbers_text_color</item>
+        <item name="android:textColor">@color/transparent_white</item>
     </style>
 
     <style name="ampm_label">
         <item name="android:textSize">@dimen/ampm_label_size</item>
-        <item name="android:textColor">@color/ampm_text_color</item>
+        <item name="android:textColor">@color/transparent_white</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="day_of_week_label_condensed" />
+
+    <style name="button_bar_button">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">36dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:paddingBottom">8dip</item>
+        <item name="android:paddingLeft">8dip</item>
+        <item name="android:paddingTop">8dip</item>
+        <item name="android:paddingRight">8dip</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

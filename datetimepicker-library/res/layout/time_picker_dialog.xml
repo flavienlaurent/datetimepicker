@@ -39,23 +39,7 @@
         android:layout_gravity="center"
         android:focusable="true"
         android:focusableInTouchMode="true" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="@color/line_background" />
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <Button
-            android:id="@+id/done_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:text="@string/done_label"
-            android:textSize="@dimen/done_label_size"
-            android:textColor="@color/done_text_color"
-            style="?android:attr/buttonBarButtonStyle" />
-    </LinearLayout>
+    <include layout="@layout/picker_done_button"
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent" />
 </LinearLayout>

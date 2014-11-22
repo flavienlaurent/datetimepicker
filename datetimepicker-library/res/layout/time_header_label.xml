@@ -18,7 +18,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center"
-      android:background="@color/white" >
+      android:background="@color/blue" >
         <View
             android:id="@+id/center_view"
             android:layout_width="1dp"
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/time_placeholder"
-                android:textColor="@color/blue"
+                android:textColor="@color/white"
                 android:gravity="center_horizontal"
                 android:layout_gravity="center"
                 style="@style/time_label" />
