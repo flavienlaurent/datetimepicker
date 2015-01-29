@@ -1,5 +1,7 @@
 package com.fourmob.datetimepicker.date;
 
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.content.Context;
@@ -20,6 +22,7 @@ import java.util.Calendar;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class SimpleMonthView extends View {
 
@@ -36,6 +39,8 @@ public class SimpleMonthView extends View {
     protected static int DEFAULT_HEIGHT = 32;
     protected static final int DEFAULT_NUM_ROWS = 6;
 	protected static int DAY_SELECTED_CIRCLE_SIZE;
+	protected static int HIHGLIGHTED_DAY_SELECTED_CIRCLE_SIZE;
+
 	protected static int DAY_SEPARATOR_WIDTH = 1;
 	protected static int MINI_DAY_NUMBER_TEXT_SIZE;
 	protected static int MIN_HEIGHT = 10;
@@ -51,13 +56,12 @@ public class SimpleMonthView extends View {
 
     protected Paint mMonthDayLabelPaint;
     protected Paint mMonthNumPaint;
-    protected Paint mMonthTitleBGPaint;
     protected Paint mMonthTitlePaint;
     protected Paint mSelectedCirclePaint;
     protected int mDayTextColor;
-    protected int mMonthTitleBGColor;
     protected int mMonthTitleColor;
     protected int mTodayNumberColor;
+    protected int mTodayCircleColor;
 
     private final StringBuilder mStringBuilder;
     private final Formatter mFormatter;
@@ -88,18 +92,21 @@ public class SimpleMonthView extends View {
 
     private OnDayClickListener mOnDayClickListener;
 
+    private Map<Integer, Integer> mHighlightedDays = new HashMap<>();
+
 	public SimpleMonthView(Context context) {
 		super(context);
+
+
+
 		Resources resources = context.getResources();
 		mDayLabelCalendar = Calendar.getInstance();
 		mCalendar = Calendar.getInstance();
 
 		mDayOfWeekTypeface = resources.getString(R.string.day_of_week_label_typeface);
 		mMonthTitleTypeface = resources.getString(R.string.sans_serif);
-		mDayTextColor = resources.getColor(R.color.date_picker_text_normal);
-		mTodayNumberColor = resources.getColor(R.color.blue);
-		mMonthTitleColor = resources.getColor(R.color.white);
-		mMonthTitleBGColor = resources.getColor(R.color.circle_background);
+
+
 
 		mStringBuilder = new StringBuilder(50);
 		mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
@@ -109,11 +116,37 @@ public class SimpleMonthView extends View {
 		MONTH_DAY_LABEL_TEXT_SIZE = resources.getDimensionPixelSize(R.dimen.month_day_label_text_size);
 		MONTH_HEADER_SIZE = resources.getDimensionPixelOffset(R.dimen.month_list_item_header_height);
 		DAY_SELECTED_CIRCLE_SIZE = resources.getDimensionPixelSize(R.dimen.day_number_select_circle_radius);
+        HIHGLIGHTED_DAY_SELECTED_CIRCLE_SIZE = resources.getDimensionPixelSize(R.dimen.highlighted_day_number_select_circle_radius);
 
 		mRowHeight = ((resources.getDimensionPixelOffset(R.dimen.date_picker_view_animator_height) - MONTH_HEADER_SIZE) / 6);
 
+        applyTheme(context);
         initView();
 	}
+
+    private void applyTheme(Context context) {
+        TypedArray a = context.obtainStyledAttributes(new int[]{R.attr.datePickerMonthViewStyle});
+        final int styleResId = a.getResourceId(0, R.style.SimpleMonthViewStyle);
+        a.recycle();
+
+        a = context.obtainStyledAttributes(styleResId, R.styleable.SimpleMonthView);
+
+        mDayTextColor = a.getColor(R.styleable.SimpleMonthView_day_text_color, Color.WHITE);
+        mTodayNumberColor = a.getColor(R.styleable.SimpleMonthView_today_color, Color.WHITE);
+        mMonthTitleColor = a.getColor(R.styleable.SimpleMonthView_month_title_color, Color.WHITE);
+        mTodayCircleColor = a.getColor(R.styleable.SimpleMonthView_selected_day_highlight_color, Color.TRANSPARENT);
+
+
+
+        a.recycle();
+    }
+
+
+
+    public void setHighlightedDays(Map<Integer, Integer> highlightedDays) {
+        mHighlightedDays.clear();
+        mHighlightedDays.putAll(highlightedDays);
+    }
 
 	private int calculateNumRows() {
         int offset = findDayOffset();
@@ -171,8 +204,15 @@ public class SimpleMonthView extends View {
 		while (day <= mNumCells) {
 			int x = paddingDay * (1 + dayOffset * 2) + mPadding;
 			if (mSelectedDay == day) {
+                mSelectedCirclePaint.setColor(mTodayCircleColor);
 				canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, DAY_SELECTED_CIRCLE_SIZE, mSelectedCirclePaint);
             }
+
+            if (mHighlightedDays.containsKey(day)) {
+                mSelectedCirclePaint.setColor(mHighlightedDays.get(day));
+                canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, HIHGLIGHTED_DAY_SELECTED_CIRCLE_SIZE, mSelectedCirclePaint);
+            }
+
             if (mHasToday && (mToday == day)) {
 				mMonthNumPaint.setColor(mTodayNumberColor);
             } else {
@@ -208,16 +248,9 @@ public class SimpleMonthView extends View {
         mMonthTitlePaint.setAntiAlias(true);
         mMonthTitlePaint.setTextSize(MONTH_LABEL_TEXT_SIZE);
         mMonthTitlePaint.setTypeface(Typeface.create(mMonthTitleTypeface, Typeface.BOLD));
-        mMonthTitlePaint.setColor(mDayTextColor);
+        mMonthTitlePaint.setColor(mMonthTitleColor);
         mMonthTitlePaint.setTextAlign(Align.CENTER);
         mMonthTitlePaint.setStyle(Style.FILL);
-
-        mMonthTitleBGPaint = new Paint();
-        mMonthTitleBGPaint.setFakeBoldText(true);
-        mMonthTitleBGPaint.setAntiAlias(true);
-        mMonthTitleBGPaint.setColor(mMonthTitleBGColor);
-        mMonthTitleBGPaint.setTextAlign(Align.CENTER);
-        mMonthTitleBGPaint.setStyle(Style.FILL);
 
         mSelectedCirclePaint = new Paint();
         mSelectedCirclePaint.setFakeBoldText(true);
@@ -225,7 +258,6 @@ public class SimpleMonthView extends View {
         mSelectedCirclePaint.setColor(mTodayNumberColor);
         mSelectedCirclePaint.setTextAlign(Align.CENTER);
         mSelectedCirclePaint.setStyle(Style.FILL);
-        mSelectedCirclePaint.setAlpha(SELECTED_CIRCLE_ALPHA);
 
         mMonthDayLabelPaint = new Paint();
         mMonthDayLabelPaint.setAntiAlias(true);

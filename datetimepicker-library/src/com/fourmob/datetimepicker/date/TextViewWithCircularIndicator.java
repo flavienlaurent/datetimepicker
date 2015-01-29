@@ -11,7 +11,7 @@ import com.fourmob.datetimepicker.R;
 
 public class TextViewWithCircularIndicator extends TextView {
     
-	private final int mCircleColor;
+	private int mCircleColor;
     private Paint mCirclePaint = new Paint();
 	private boolean mDrawCircle;
 	private final String mItemIsSelectedText;
@@ -27,6 +27,11 @@ public class TextViewWithCircularIndicator extends TextView {
         
 		init();
 	}
+
+    public void setCircleColor(int color) {
+        mCircleColor = color;
+        mCirclePaint.setColor(color);
+    }
 
 	private void init() {
 		mCirclePaint.setFakeBoldText(true);
@@ -50,12 +55,13 @@ public class TextViewWithCircularIndicator extends TextView {
 	}
 
 	public void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
 		if (mDrawCircle) {
 			int width = getWidth();
-			int heigth = getHeight();
-			int radius = Math.min(width, heigth) / 2;
-			canvas.drawCircle(width / 2, heigth / 2, radius, mCirclePaint);
+			int height = getHeight();
+			int radius = Math.min(width, height) / 2;
+			canvas.drawCircle(width / 2, height / 2, radius, mCirclePaint);
 		}
+
+        super.onDraw(canvas);
 	}
 }

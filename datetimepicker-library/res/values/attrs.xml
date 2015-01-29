@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="DatePickerDialog">
+        <attr name="date_picker_header_background_color" format="color|reference"/>
+        <attr name="date_picker_header_text_color" format="color|reference"/>
+
+        <attr name="date_picker_date_container_background_color" format="color|reference"/>
+        <attr name="date_picker_selected_date_text_color" format="color|reference"/>
+
+        <attr name="date_picker_background_color" format="color|reference"/>
+
+        <!-- TODO: -->
+        <attr name="date_picker_button_bar_text_color" format="color|reference"/>
+        <attr name="date_picker_button_bar_background" format="color|reference"/>
+
+        <attr name="select_only_from_highlights" format="boolean"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="SimpleMonthView">
+        <attr name="day_text_color" format="reference|color"/>
+        <attr name="today_color" format="reference|color"/>
+        <attr name="month_title_color" format="reference|color"/>
+        <attr name="selected_day_highlight_color" format="reference|color"/>
+    </declare-styleable>
+
+    <declare-styleable name="YearPickerView">
+        <attr name="year_text_color" format="reference|color"/>
+        <attr name="selected_year_highlight_color" format="reference|color"/>
+    </declare-styleable>
+
+    <attr name="datePickerDialogStyle" format="reference"/>
+    <attr name="datePickerMonthViewStyle" format="reference"/>
+    <attr name="datePickerYearViewStyle" format="reference"/>
+
+
+</resources>

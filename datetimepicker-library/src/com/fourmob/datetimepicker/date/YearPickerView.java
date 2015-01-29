@@ -2,6 +2,8 @@ package com.fourmob.datetimepicker.date;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,8 @@ public class YearPickerView extends ListView implements AdapterView.OnItemClickL
 		mController.registerOnDateChangedListener(this);
 
 		setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+        applyTheme(context);
 
 		Resources resources = context.getResources();
 		mViewSize = resources.getDimensionPixelOffset(R.dimen.date_picker_view_animator_height);
@@ -101,6 +105,22 @@ public class YearPickerView extends ListView implements AdapterView.OnItemClickL
 		});
 	}
 
+    private int mHighlightColor;
+    private int mTextColor;
+
+    private void applyTheme(Context context) {
+        TypedArray a = context.obtainStyledAttributes(new int[]{R.attr.datePickerYearViewStyle});
+        final int styleResId = a.getResourceId(0, R.style.SimpleYearViewStyle);
+        a.recycle();
+
+        a = context.obtainStyledAttributes(styleResId, R.styleable.YearPickerView);
+
+        mHighlightColor = a.getColor(R.styleable.YearPickerView_selected_year_highlight_color, Color.WHITE);
+        mTextColor = a.getColor(R.styleable.YearPickerView_year_text_color, Color.WHITE);
+
+        a.recycle();
+    }
+
 	private class YearAdapter extends ArrayAdapter<String> {
 
         public YearAdapter(Context context, int resource, List<String> years) {
@@ -110,6 +130,9 @@ public class YearPickerView extends ListView implements AdapterView.OnItemClickL
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextViewWithCircularIndicator v = (TextViewWithCircularIndicator) super.getView(position, convertView, parent);
+            v.setTextColor(mTextColor);
+            v.setCircleColor(mHighlightColor);
+
             v.requestLayout();
             int year = getYearFromTextView(v);
             boolean selected = mController.getSelectedDay().year == year;
@@ -117,6 +140,7 @@ public class YearPickerView extends ListView implements AdapterView.OnItemClickL
             if (selected) {
                 mSelectedView = v;
             }
+
             return v;
         }
 	}

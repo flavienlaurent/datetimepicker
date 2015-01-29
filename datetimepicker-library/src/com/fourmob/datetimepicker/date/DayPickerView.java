@@ -9,6 +9,9 @@ import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DayPickerView extends ListView implements AbsListView.OnScrollListener, DatePickerDialog.OnDateChangedListener {
 
     protected static final int GOTO_SCROLL_DURATION = 250;
@@ -37,6 +40,10 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
     protected int mDaysPerWeek = 7;
 
     protected float mFriction = 1.0F;
+
+    public void setHighlightedDays(Map<Long, Map<Integer, Integer>> highlightedDays) {
+        mAdapter.setHighlightedDays(highlightedDays);
+    }
 
 	public DayPickerView(Context context, DatePickerController datePickerController) {
 		super(context);

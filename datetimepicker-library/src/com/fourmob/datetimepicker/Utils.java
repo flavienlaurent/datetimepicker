@@ -1,6 +1,7 @@
 package com.fourmob.datetimepicker;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
@@ -10,6 +11,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.PropertyValuesHolder;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Utils {
@@ -73,5 +76,58 @@ public class Utils {
         } else {
             return false;
         }
+    }
+
+
+    public static Map<Long, Map<Integer, Integer>> groupHighlightedDaysByMonth(Map<Long, Integer> highlightedDays) {
+        Map<Long, Map<Integer, Integer>> result = new HashMap<>();
+
+        Calendar calendar = Calendar.getInstance();
+
+        for (Map.Entry<Long, Integer> entry: highlightedDays.entrySet()) {
+            long month = cutToMonth(calendar, entry.getKey());
+
+            Map<Integer, Integer> days;
+            if (result.containsKey(month)) {
+                days = result.get(month);
+            } else {
+                days = new HashMap<>();
+                result.put(month, days);
+            }
+
+            calendar.clear();
+            calendar.setTimeInMillis(entry.getKey());
+
+            days.put(calendar.get(Calendar.DAY_OF_MONTH), entry.getValue());
+        }
+
+        return result;
+    }
+
+    public static long cutToMonth(Calendar tempCalendar, long time) {
+        tempCalendar.clear();
+        tempCalendar.setTimeInMillis(time);
+
+        int year = tempCalendar.get(Calendar.YEAR);
+        int month = tempCalendar.get(Calendar.MONTH);
+
+        tempCalendar.clear();
+        tempCalendar.set(year, month, 1);
+
+        return tempCalendar.getTimeInMillis();
+    }
+
+    public static long toMidnightDay(Calendar tempCalendar, long time) {
+        tempCalendar.clear();
+        tempCalendar.setTimeInMillis(time);
+
+        int year = tempCalendar.get(Calendar.YEAR);
+        int month = tempCalendar.get(Calendar.MONTH);
+        int day = tempCalendar.get(Calendar.DAY_OF_MONTH);
+
+        tempCalendar.clear();
+        tempCalendar.set(year, month, day);
+
+        return tempCalendar.getTimeInMillis();
     }
 }

@@ -8,7 +8,9 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.OnDayClickListener {
 
@@ -20,9 +22,12 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 
 	private CalendarDay mSelectedDay;
 
+    private Calendar mCalendar;
+
 	public SimpleMonthAdapter(Context context, DatePickerController datePickerController) {
 		mContext = context;
 		mController = datePickerController;
+        mCalendar = Calendar.getInstance();
 		init();
 		setSelectedDay(mController.getSelectedDay());
 	}
@@ -63,6 +68,16 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
         final int month = position % MONTHS_IN_YEAR;
         final int year = position / MONTHS_IN_YEAR + mController.getMinYear();
 
+        mCalendar.clear();
+        mCalendar.set(year, month, 1);
+
+        if (mHighlightedDays.containsKey(mCalendar.getTimeInMillis())) {
+            Map<Integer, Integer> days = mHighlightedDays.get(mCalendar.getTimeInMillis());
+            v.setHighlightedDays(days);
+        } else {
+            v.setHighlightedDays(Collections.<Integer, Integer>emptyMap());
+        }
+
         int selectedDay = -1;
         if (isSelectedDayInMonth(year, month)) {
             selectedDay = mSelectedDay.day;
@@ -83,6 +98,14 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 	protected void init() {
 		mSelectedDay = new CalendarDay(System.currentTimeMillis());
 	}
+
+    private Map<Long, Map<Integer, Integer>> mHighlightedDays = new HashMap<>();
+
+    public void setHighlightedDays(Map<Long, Map<Integer, Integer>> highlightedDays) {
+        mHighlightedDays.clear();
+        mHighlightedDays.putAll(highlightedDays);
+        notifyDataSetChanged();
+    }
 
 	public void onDayClick(SimpleMonthView simpleMonthView, CalendarDay calendarDay) {
 		if (calendarDay != null) {
