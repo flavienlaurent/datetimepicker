@@ -15,6 +15,7 @@
     <dimen name="selected_date_month_size">30dip</dimen>
     <dimen name="date_picker_header_text_size">14dip</dimen>
     <dimen name="month_label_size">16sp</dimen>
+    <dimen name="month_view_bottom_pad">6dp</dimen>
     <dimen name="day_number_size">16sp</dimen>
     <dimen name="year_label_height">64dip</dimen>
     <dimen name="year_label_text_size">22dip</dimen>
@@ -39,4 +40,6 @@
     <item name="text_size_multiplier_normal" format="float" type="string">0.17</item>
     <item name="text_size_multiplier_inner" format="float" type="string">0.14</item>
     <item name="text_size_multiplier_outer" format="float" type="string">0.11</item>
+
+
 </resources>

@@ -283,7 +283,7 @@ public class SimpleMonthView extends View {
 	}
 
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), mRowHeight * mNumRows + MONTH_HEADER_SIZE);
+		setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), mRowHeight * mNumRows + MONTH_HEADER_SIZE + getResources().getDimensionPixelOffset(R.dimen.month_view_bottom_pad));
 	}
 
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
