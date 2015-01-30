@@ -100,6 +100,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     private boolean mCloseOnSingleTapDay;
 
     private boolean mSelectedOnlyFromHighlights;
+    private boolean mYearClickEnabled = true;
 
     private Calendar mTempCalendar = Calendar.getInstance();
     private Map<Long, Integer> mHighlights = new HashMap<>();
@@ -299,7 +300,12 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		mSelectedMonthTextView = ((TextView) view.findViewById(R.id.date_picker_month));
 		mSelectedDayTextView = ((TextView) view.findViewById(R.id.date_picker_day));
 		mYearView = ((TextView) view.findViewById(R.id.date_picker_year));
-		mYearView.setOnClickListener(this);
+		if (mYearClickEnabled) {
+            mYearView.setOnClickListener(this);
+        } else {
+            mYearView.setClickable(false);
+        }
+
 
 		int listPosition = -1;
 		int currentView = MONTH_AND_DAY_VIEW;
@@ -519,6 +525,11 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
     public void setSelectedOnlyHighlights(boolean selectOnlyFromHighlights) {
         mSelectedOnlyFromHighlights = selectOnlyFromHighlights;
+    }
+
+
+    public void setYearClickEnabled(boolean enabled) {
+        mYearClickEnabled = enabled;
     }
 
     static abstract interface OnDateChangedListener {
