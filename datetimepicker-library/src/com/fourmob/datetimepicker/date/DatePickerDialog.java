@@ -353,6 +353,12 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
         });
 
         mCancelButton = (Button) view.findViewById(R.id.cancel);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
 		updateDisplay(false);
 		setCurrentView(currentView, true);
@@ -410,7 +416,17 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     private void onDoneButtonClick() {
         tryVibrate();
         if (mCallBack != null) {
-            mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+
+            if (mCloseOnSingleTapDay) {
+                Calendar calendar = (Calendar) mDayPickerView.getItemAtPosition(mDayPickerView.getMostVisiblePosition());
+                if (calendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH)) {
+                    mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+                } else {
+                    mCallBack.onDateSet(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                }
+            } else {
+                mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+            }
         }
         dismiss();
     }

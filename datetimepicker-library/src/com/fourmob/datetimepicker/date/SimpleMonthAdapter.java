@@ -41,7 +41,13 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 	}
 
 	public Object getItem(int position) {
-		return null;
+        final int month = position % MONTHS_IN_YEAR;
+        final int year = position / MONTHS_IN_YEAR + mController.getMinYear();
+
+        mCalendar.clear();
+        mCalendar.set(year, month, 1);
+
+		return mCalendar;
 	}
 
 	public long getItemId(int position) {
@@ -77,6 +83,8 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
         } else {
             v.setHighlightedDays(Collections.<Integer, Integer>emptyMap());
         }
+
+
 
         int selectedDay = -1;
         if (isSelectedDayInMonth(year, month)) {
