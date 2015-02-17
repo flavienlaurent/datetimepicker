@@ -9,26 +9,29 @@ import android.widget.TextView;
 
 import com.fourmob.datetimepicker.R;
 
-public class TextViewWithCircularIndicator extends TextView {
-    
+public class TextViewWithCircularIndicator extends TextView
+{
+
 	private final int mCircleColor;
-    private Paint mCirclePaint = new Paint();
-	private boolean mDrawCircle;
 	private final String mItemIsSelectedText;
 	private final int mRadius;
+	private Paint mCirclePaint = new Paint();
+	private boolean mDrawCircle;
 
-	public TextViewWithCircularIndicator(Context context, AttributeSet attributeSet) {
+	public TextViewWithCircularIndicator(Context context, AttributeSet attributeSet)
+	{
 		super(context, attributeSet);
-        
+
 		Resources res = context.getResources();
 		mCircleColor = res.getColor(R.color.blue);
 		mRadius = res.getDimensionPixelOffset(R.dimen.month_select_circle_radius);
 		mItemIsSelectedText = context.getResources().getString(R.string.item_is_selected);
-        
+
 		init();
 	}
 
-	private void init() {
+	private void init()
+	{
 		mCirclePaint.setFakeBoldText(true);
 		mCirclePaint.setAntiAlias(true);
 		mCirclePaint.setColor(mCircleColor);
@@ -37,21 +40,26 @@ public class TextViewWithCircularIndicator extends TextView {
 		mCirclePaint.setAlpha(60);
 	}
 
-	public void drawIndicator(boolean drawIndicator) {
+	public void drawIndicator(boolean drawIndicator)
+	{
 		mDrawCircle = drawIndicator;
 	}
 
-	public CharSequence getContentDescription() {
+	public CharSequence getContentDescription()
+	{
 		CharSequence text = getText();
-		if (mDrawCircle) {
+		if (mDrawCircle)
+		{
 			text = String.format(mItemIsSelectedText, text);
-        }
+		}
 		return text;
 	}
 
-	public void onDraw(Canvas canvas) {
+	public void onDraw(Canvas canvas)
+	{
 		super.onDraw(canvas);
-		if (mDrawCircle) {
+		if (mDrawCircle)
+		{
 			int width = getWidth();
 			int heigth = getHeight();
 			int radius = Math.min(width, heigth) / 2;

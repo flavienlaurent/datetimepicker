@@ -1,6 +1,7 @@
 package com.fourmob.datetimepicker.date;
 
-abstract interface DatePickerController {
+abstract interface DatePickerController
+{
 	public abstract int getFirstDayOfWeek();
 
 	public abstract int getMaxYear();

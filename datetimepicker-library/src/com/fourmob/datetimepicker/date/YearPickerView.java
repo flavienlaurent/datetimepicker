@@ -15,15 +15,17 @@ import com.fourmob.datetimepicker.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class YearPickerView extends ListView implements AdapterView.OnItemClickListener, DatePickerDialog.OnDateChangedListener {
-	
-    private YearAdapter mAdapter;
-	private int mChildSize;
+public class YearPickerView extends ListView implements AdapterView.OnItemClickListener, DatePickerDialog.OnDateChangedListener
+{
+
 	private final DatePickerController mController;
+	private YearAdapter mAdapter;
+	private int mChildSize;
 	private TextViewWithCircularIndicator mSelectedView;
 	private int mViewSize;
 
-	public YearPickerView(Context context, DatePickerController datePickerController) {
+	public YearPickerView(Context context, DatePickerController datePickerController)
+	{
 		super(context);
 		mController = datePickerController;
 		mController.registerOnDateChangedListener(this);
@@ -43,81 +45,99 @@ public class YearPickerView extends ListView implements AdapterView.OnItemClickL
 		onDateChanged();
 	}
 
-    private static int getYearFromTextView(TextView view) {
-        return Integer.valueOf(view.getText().toString());
-    }
+	private static int getYearFromTextView(TextView view)
+	{
+		return Integer.valueOf(view.getText().toString());
+	}
 
-	private void init(Context context) {
+	private void init(Context context)
+	{
 		ArrayList<String> years = new ArrayList<String>();
-		for (int year = mController.getMinYear(); year <= mController.getMaxYear(); year++) {
+		for (int year = mController.getMinYear(); year <= mController.getMaxYear(); year++)
+		{
 			years.add(String.format("%d", year));
 		}
 		mAdapter = new YearAdapter(context, R.layout.year_label_text_view, years);
 		setAdapter(mAdapter);
 	}
 
-	public int getFirstPositionOffset() {
-        final View firstChild = getChildAt(0);
-        if (firstChild == null) {
-            return 0;
-        }
-        return firstChild.getTop();
+	public int getFirstPositionOffset()
+	{
+		final View firstChild = getChildAt(0);
+		if (firstChild == null)
+		{
+			return 0;
+		}
+		return firstChild.getTop();
 	}
 
-	public void onDateChanged() {
+	public void onDateChanged()
+	{
 		mAdapter.notifyDataSetChanged();
 		postSetSelectionCentered(mController.getSelectedDay().year - mController.getMinYear());
 	}
 
 
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mController.tryVibrate();
-        TextViewWithCircularIndicator clickedView = (TextViewWithCircularIndicator) view;
-        if (clickedView != null) {
-            if (clickedView != mSelectedView) {
-                if (mSelectedView != null) {
-                    mSelectedView.drawIndicator(false);
-                    mSelectedView.requestLayout();
-                }
-                clickedView.drawIndicator(true);
-                clickedView.requestLayout();
-                mSelectedView = clickedView;
-            }
-            mController.onYearSelected(getYearFromTextView(clickedView));
-            mAdapter.notifyDataSetChanged();
-        }
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	{
+		mController.tryVibrate();
+		TextViewWithCircularIndicator clickedView = (TextViewWithCircularIndicator) view;
+		if (clickedView != null)
+		{
+			if (clickedView != mSelectedView)
+			{
+				if (mSelectedView != null)
+				{
+					mSelectedView.drawIndicator(false);
+					mSelectedView.requestLayout();
+				}
+				clickedView.drawIndicator(true);
+				clickedView.requestLayout();
+				mSelectedView = clickedView;
+			}
+			mController.onYearSelected(getYearFromTextView(clickedView));
+			mAdapter.notifyDataSetChanged();
+		}
 	}
 
-	public void postSetSelectionCentered(int position) {
+	public void postSetSelectionCentered(int position)
+	{
 		postSetSelectionFromTop(position, mViewSize / 2 - mChildSize / 2);
 	}
 
-	public void postSetSelectionFromTop(final int position, final int y) {
-		post(new Runnable() {
-			public void run() {
+	public void postSetSelectionFromTop(final int position, final int y)
+	{
+		post(new Runnable()
+		{
+			public void run()
+			{
 				setSelectionFromTop(position, y);
 				requestLayout();
 			}
 		});
 	}
 
-	private class YearAdapter extends ArrayAdapter<String> {
+	private class YearAdapter extends ArrayAdapter<String>
+	{
 
-        public YearAdapter(Context context, int resource, List<String> years) {
-            super(context, resource, years);
-        }
+		public YearAdapter(Context context, int resource, List<String> years)
+		{
+			super(context, resource, years);
+		}
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextViewWithCircularIndicator v = (TextViewWithCircularIndicator) super.getView(position, convertView, parent);
-            v.requestLayout();
-            int year = getYearFromTextView(v);
-            boolean selected = mController.getSelectedDay().year == year;
-            v.drawIndicator(selected);
-            if (selected) {
-                mSelectedView = v;
-            }
-            return v;
-        }
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			TextViewWithCircularIndicator v = (TextViewWithCircularIndicator) super.getView(position, convertView, parent);
+			v.requestLayout();
+			int year = getYearFromTextView(v);
+			boolean selected = mController.getSelectedDay().year == year;
+			v.drawIndicator(selected);
+			if (selected)
+			{
+				mSelectedView = v;
+			}
+			return v;
+		}
 	}
 }
