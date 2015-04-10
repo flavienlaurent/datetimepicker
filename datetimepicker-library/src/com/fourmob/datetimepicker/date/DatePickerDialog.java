@@ -59,6 +59,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     private HashSet<OnDateChangedListener> mListeners = new HashSet<OnDateChangedListener>();
     private OnDateSetListener mCallBack;
 
+	private boolean mYearOnly = false;
+
     private AccessibleDateAnimator mAnimator;
     private boolean mDelayAnimation = true;
     private long mLastVibrate;
@@ -108,6 +110,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		return datePickerDialog;
 	}
 
+	public void setYearOnly(boolean yearOnly) { mYearOnly = yearOnly; }
 
 	public void setVibrate(boolean vibrate) {
 		mVibrate = vibrate;
@@ -314,6 +317,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 				mYearPickerView.postSetSelectionFromTop(listPosition, listPositionOffset);
 			}
 		}
+		setCurrentView(mYearOnly ? YEAR_VIEW : MONTH_AND_DAY_VIEW);
 		return view;
 	}
 
@@ -348,9 +352,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		bundle.putInt(KEY_CURRENT_VIEW, mCurrentView);
 
 		int listPosition = -1;
-		if (mCurrentView == 0) {
+		if (mCurrentView == MONTH_AND_DAY_VIEW) {
 			listPosition = mDayPickerView.getMostVisiblePosition();
-        } if (mCurrentView == 1) {
+        } if (mCurrentView == YEAR_VIEW) {
 			listPosition = mYearPickerView.getFirstVisiblePosition();
 			bundle.putInt(KEY_LIST_POSITION_OFFSET, mYearPickerView.getFirstPositionOffset());
 		}
@@ -362,6 +366,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		adjustDayInMonthIfNeeded(mCalendar.get(Calendar.MONTH), year);
 		mCalendar.set(Calendar.YEAR, year);
 		updatePickers();
+		if (mYearOnly)
+			onDoneButtonClick();
 		setCurrentView(MONTH_AND_DAY_VIEW);
 		updateDisplay(true);
 	}
