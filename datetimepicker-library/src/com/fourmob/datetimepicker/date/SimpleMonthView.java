@@ -31,8 +31,11 @@ public class SimpleMonthView extends View {
     public static final String VIEW_PARAMS_NUM_DAYS = "num_days";
     public static final String VIEW_PARAMS_FOCUS_MONTH = "focus_month";
     public static final String VIEW_PARAMS_SHOW_WK_NUM = "show_wk_num";
+    public static final String VIEW_PARAMS_MIN_DATE_DAY = "minDateDay";
 
     private static final int SELECTED_CIRCLE_ALPHA = 60;
+    public static final String VIEW_PARAMS_MIN_DATE_MONTH = "minDateMonth";
+    public static final String VIEW_PARAMS_MIN_DATE_YEAR ="minDateYear" ;
     protected static int DEFAULT_HEIGHT = 32;
     protected static final int DEFAULT_NUM_ROWS = 6;
 	protected static int DAY_SELECTED_CIRCLE_SIZE;
@@ -44,6 +47,7 @@ public class SimpleMonthView extends View {
 	protected static int MONTH_LABEL_TEXT_SIZE;
 
 	protected static float mScale = 0.0F;
+    private final int mDayDisabledTextColor;
     protected int mPadding = 0;
 
     private String mDayOfWeekTypeface;
@@ -87,8 +91,9 @@ public class SimpleMonthView extends View {
 	private DateFormatSymbols mDateFormatSymbols = new DateFormatSymbols();
 
     private OnDayClickListener mOnDayClickListener;
+    private SimpleMonthAdapter.CalendarDay mMinDate;
 
-	public SimpleMonthView(Context context) {
+    public SimpleMonthView(Context context) {
 		super(context);
 		Resources resources = context.getResources();
 		mDayLabelCalendar = Calendar.getInstance();
@@ -97,6 +102,7 @@ public class SimpleMonthView extends View {
 		mDayOfWeekTypeface = resources.getString(R.string.day_of_week_label_typeface);
 		mMonthTitleTypeface = resources.getString(R.string.sans_serif);
 		mDayTextColor = resources.getColor(R.color.date_picker_text_normal);
+        mDayDisabledTextColor = resources.getColor(R.color.done_text_color_disabled);
 		mTodayNumberColor = resources.getColor(R.color.blue);
 		mMonthTitleColor = resources.getColor(R.color.white);
 		mMonthTitleBGColor = resources.getColor(R.color.circle_background);
@@ -167,7 +173,10 @@ public class SimpleMonthView extends View {
 		int paddingDay = (mWidth - 2 * mPadding) / (2 * mNumDays);
 		int dayOffset = findDayOffset();
 		int day = 1;
-
+        boolean hasDisabledDays = false;
+        if(mMonth <= mMinDate.month && mYear <= mMinDate.year){
+            hasDisabledDays = true;
+        }
 		while (day <= mNumCells) {
 			int x = paddingDay * (1 + dayOffset * 2) + mPadding;
 			if (mSelectedDay == day) {
@@ -176,7 +185,12 @@ public class SimpleMonthView extends View {
             if (mHasToday && (mToday == day)) {
 				mMonthNumPaint.setColor(mTodayNumberColor);
             } else {
-				mMonthNumPaint.setColor(mDayTextColor);
+                mMonthNumPaint.setColor(mDayTextColor);
+                if(hasDisabledDays){
+                    if(mMinDate.isAfter(new SimpleMonthAdapter.CalendarDay(mYear,mMonth,day))){
+                        mMonthNumPaint.setColor(mDayDisabledTextColor);
+                    }
+                }
             }
 
 			canvas.drawText(String.format("%d", day), x, y, mMonthNumPaint);
@@ -278,6 +292,10 @@ public class SimpleMonthView extends View {
             throw new InvalidParameterException("You must specify month and year for this view");
         }
 		setTag(params);
+
+        if (params.containsKey(VIEW_PARAMS_MIN_DATE_DAY) && params.containsKey(VIEW_PARAMS_MIN_DATE_MONTH) && params.containsKey(VIEW_PARAMS_MIN_DATE_YEAR)) {
+            this.mMinDate = new SimpleMonthAdapter.CalendarDay(params.get(VIEW_PARAMS_MIN_DATE_YEAR), params.get(VIEW_PARAMS_MIN_DATE_MONTH), params.get(VIEW_PARAMS_MIN_DATE_DAY));
+        }
 
         if (params.containsKey(VIEW_PARAMS_HEIGHT)) {
             mRowHeight = params.get(VIEW_PARAMS_HEIGHT);
