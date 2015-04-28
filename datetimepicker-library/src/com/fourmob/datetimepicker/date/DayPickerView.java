@@ -126,7 +126,7 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
 	public void init(Context paramContext) {
 		mContext = paramContext;
 		setUpListView();
-		setUpAdapter();
+		setUpAdapter(null);
 		setAdapter(mAdapter);
 	}
 
@@ -138,7 +138,7 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
 	}
 
 	public void onChange() {
-		setUpAdapter();
+		setUpAdapter(null);
 		setAdapter(mAdapter);
 	}
 
@@ -177,11 +177,16 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
 		invalidateViews();
 	}
 
-	protected void setUpAdapter() {
+    public void setMinDate(SimpleMonthAdapter.CalendarDay day){
+        mAdapter.setMinDate(day);
+    }
+
+	protected void setUpAdapter(SimpleMonthAdapter.CalendarDay mMaxDate) {
 		if (mAdapter == null) {
 			mAdapter = new SimpleMonthAdapter(getContext(), mController);
         }
 		mAdapter.setSelectedDay(this.mSelectedDay);
+        mAdapter.setMinDate(mMaxDate);
 		mAdapter.notifyDataSetChanged();
 	}
 
