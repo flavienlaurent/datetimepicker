@@ -95,7 +95,7 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 
     public void onDayClick(SimpleMonthView simpleMonthView, CalendarDay calendarDay) {
         if (calendarDay != null) {
-            if (this.mMinDate == null || calendarDay.isAfter(this.mMinDate)) {
+            if (this.mMinDate == null || calendarDay.isAfter(this.mMinDate) || calendarDay.equals(this.mMinDate)) {
                 onDayTapped(calendarDay);
             } else {
                 Log.i(TAG, "ignoring push since day is after mindate or mindate is not set");

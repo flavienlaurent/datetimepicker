@@ -114,9 +114,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     public void setMinDate(SimpleMonthAdapter.CalendarDay minDate) {
         if (mDayPickerView != null) {
             mDayPickerView.setMinDate(minDate);
-        } else {
-            this.minDate = minDate;
         }
+            this.minDate = minDate;
     }
 
 
