@@ -459,10 +459,7 @@ public class TimePickerDialog extends DialogFragment implements RadialPickerLayo
      * @return true if the key was successfully processed, false otherwise.
      */
     private boolean processKeyUp(int keyCode) {
-        if (keyCode == KeyEvent.KEYCODE_ESCAPE || keyCode == KeyEvent.KEYCODE_BACK) {
-            dismiss();
-            return true;
-        } else if (keyCode == KeyEvent.KEYCODE_TAB) {
+        if (keyCode == KeyEvent.KEYCODE_TAB) {
             if (mInKbMode) {
                 if (isTypedTimeFullyLegal()) {
                     finishKbMode(true);
