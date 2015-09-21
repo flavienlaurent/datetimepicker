@@ -8,12 +8,14 @@
     <dimen name="month_list_item_header_height">50dip</dimen>
     <dimen name="month_day_label_text_size">10sp</dimen>
     <dimen name="day_number_select_circle_radius">16dip</dimen>
+    <dimen name="highlighted_day_number_select_circle_radius">12dip</dimen>
     <dimen name="month_select_circle_radius">45dip</dimen>
     <dimen name="selected_date_year_size">30dip</dimen>
     <dimen name="selected_date_day_size">75dip</dimen>
     <dimen name="selected_date_month_size">30dip</dimen>
     <dimen name="date_picker_header_text_size">14dip</dimen>
     <dimen name="month_label_size">16sp</dimen>
+    <dimen name="month_view_bottom_pad">6dp</dimen>
     <dimen name="day_number_size">16sp</dimen>
     <dimen name="year_label_height">64dip</dimen>
     <dimen name="year_label_text_size">22dip</dimen>
@@ -38,4 +40,6 @@
     <item name="text_size_multiplier_normal" format="float" type="string">0.17</item>
     <item name="text_size_multiplier_inner" format="float" type="string">0.14</item>
     <item name="text_size_multiplier_outer" format="float" type="string">0.11</item>
+
+
 </resources>

@@ -1,8 +1,14 @@
 package com.fourmob.datetimepicker.date;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
@@ -23,10 +29,13 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 public class DatePickerDialog extends DialogFragment implements View.OnClickListener, DatePickerController {
 
@@ -50,6 +59,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     public static final String KEY_CURRENT_VIEW = "current_view";
     public static final String KEY_LIST_POSITION = "list_position";
     public static final String KEY_LIST_POSITION_OFFSET = "list_position_offset";
+    private static final String KEY_HIGHLIGHTS = "highlights";
 
     private static SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd", Locale.getDefault());
 	private static SimpleDateFormat YEAR_FORMAT = new SimpleDateFormat("yyyy", Locale.getDefault());
@@ -75,16 +85,26 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
 	private TextView mDayOfWeekView;
 	private DayPickerView mDayPickerView;
-	private Button mDoneButton;
+	private Button mOkButton;
+	private Button mCancelButton;
 	private LinearLayout mMonthAndDayView;
 	private TextView mSelectedDayTextView;
 	private TextView mSelectedMonthTextView;
 	private Vibrator mVibrator;
 	private YearPickerView mYearPickerView;
 	private TextView mYearView;
+    private View mSelectedDateLayout;
+    private View mButtonBar;
 
     private boolean mVibrate = true;
     private boolean mCloseOnSingleTapDay;
+
+    private boolean mSelectedOnlyFromHighlights;
+    private boolean mYearClickEnabled = true;
+
+    private Calendar mTempCalendar = Calendar.getInstance();
+    private Map<Long, Integer> mHighlights = new HashMap<>();
+
 
     private void adjustDayInMonthIfNeeded(int month, int year) {
         int day = mCalendar.get(Calendar.DAY_OF_MONTH);
@@ -103,10 +123,14 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	}
 
 	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate) {
-		DatePickerDialog datePickerDialog = new DatePickerDialog();
-		datePickerDialog.initialize(onDateSetListener, year, month, day, vibrate);
-		return datePickerDialog;
+		return newInstance(onDateSetListener, year, month, day, true, null);
 	}
+
+    public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate, Map<Long, Integer> highlights) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog();
+        datePickerDialog.initialize(onDateSetListener, year, month, day, vibrate, highlights);
+        return datePickerDialog;
+    }
 
 
 	public void setVibrate(boolean vibrate) {
@@ -215,7 +239,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		return new SimpleMonthAdapter.CalendarDay(mCalendar);
 	}
 
-	public void initialize(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate) {
+	public void initialize(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate, Map<Long, Integer> highlights) {
 		if (year > MAX_YEAR)
 			throw new IllegalArgumentException("year end must < " + MAX_YEAR);
 		if (year < MIN_YEAR)
@@ -225,6 +249,13 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		mCalendar.set(Calendar.MONTH, month);
 		mCalendar.set(Calendar.DAY_OF_MONTH, day);
 		mVibrate = vibrate;
+
+        if (highlights != null) {
+            mHighlights.clear();
+            for (Map.Entry<Long, Integer> entry: highlights.entrySet()) {
+                mHighlights.put(Utils.toMidnightDay(mTempCalendar, entry.getKey()), entry.getValue());
+            }
+        }
 	}
 
 	public void onClick(View view) {
@@ -245,6 +276,13 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 			mCalendar.set(Calendar.MONTH, bundle.getInt(KEY_SELECTED_MONTH));
 			mCalendar.set(Calendar.DAY_OF_MONTH, bundle.getInt(KEY_SELECTED_DAY));
 			mVibrate = bundle.getBoolean(KEY_VIBRATE);
+
+            ArrayList<HighlightedDay> days = bundle.getParcelableArrayList(KEY_HIGHLIGHTS);
+            if (days != null) {
+                for (HighlightedDay day: days) {
+                    mHighlights.put(day.timestamp, day.color);
+                }
+            }
 		}
 	}
 
@@ -253,17 +291,26 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
 		View view = layoutInflater.inflate(R.layout.date_picker_dialog, null);
 
+        mSelectedDateLayout = view.findViewById(R.id.day_picker_selected_date_layout);
+        mButtonBar = view.findViewById(R.id.button_bar);
+
 		mDayOfWeekView = ((TextView) view.findViewById(R.id.date_picker_header));
 		mMonthAndDayView = ((LinearLayout) view.findViewById(R.id.date_picker_month_and_day));
 		mMonthAndDayView.setOnClickListener(this);
 		mSelectedMonthTextView = ((TextView) view.findViewById(R.id.date_picker_month));
 		mSelectedDayTextView = ((TextView) view.findViewById(R.id.date_picker_day));
 		mYearView = ((TextView) view.findViewById(R.id.date_picker_year));
-		mYearView.setOnClickListener(this);
+		if (mYearClickEnabled) {
+            mYearView.setOnClickListener(this);
+        } else {
+            mYearView.setClickable(false);
+        }
+
 
 		int listPosition = -1;
 		int currentView = MONTH_AND_DAY_VIEW;
 		int listPositionOffset = 0;
+
 		if (bundle != null) {
 			mWeekStart = bundle.getInt(KEY_WEEK_START);
 			mMinYear = bundle.getInt(KEY_YEAR_START);
@@ -275,6 +322,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
 		Activity activity = getActivity();
 		mDayPickerView = new DayPickerView(activity, this);
+        mDayPickerView.setHighlightedDays(Utils.groupHighlightedDaysByMonth(mHighlights));
+
 		mYearPickerView = new YearPickerView(activity, this);
 
 		Resources resources = getResources();
@@ -296,12 +345,20 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		outAlphaAnimation.setDuration(300L);
 		mAnimator.setOutAnimation(outAlphaAnimation);
 
-		mDoneButton = ((Button) view.findViewById(R.id.done));
-		mDoneButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
+		mOkButton = ((Button) view.findViewById(R.id.ok));
+		mOkButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 onDoneButtonClick();
-			}
-		});
+            }
+        });
+
+        mCancelButton = (Button) view.findViewById(R.id.cancel);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
 		updateDisplay(false);
 		setCurrentView(currentView, true);
@@ -314,28 +371,91 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 				mYearPickerView.postSetSelectionFromTop(listPosition, listPositionOffset);
 			}
 		}
+
+        applyTheme(layoutInflater.getContext());
 		return view;
 	}
+
+    private void applyTheme(Context context) {
+        TypedArray a = context.obtainStyledAttributes(new int[]{R.attr.datePickerDialogStyle});
+        final int styleResId = a.getResourceId(0, R.style.DatePickerDialogStyle);
+        a.recycle();
+
+        a = context.obtainStyledAttributes(styleResId, R.styleable.DatePickerDialog);
+
+        final int headerBackground = a.getColor(R.styleable.DatePickerDialog_date_picker_header_background_color, Color.WHITE);
+        final int headerTextColor = a.getColor(R.styleable.DatePickerDialog_date_picker_header_text_color, Color.WHITE);
+
+        mDayOfWeekView.setTextColor(headerTextColor);
+        mDayOfWeekView.setBackgroundColor(headerBackground);
+
+        final int selectedDateBoxBkg = a.getColor(R.styleable.DatePickerDialog_date_picker_date_container_background_color, Color.WHITE);
+        mSelectedDateLayout.setBackgroundColor(selectedDateBoxBkg);
+
+        final ColorStateList selectedDateColors = a.getColorStateList(R.styleable.DatePickerDialog_date_picker_selected_date_text_color);
+        mSelectedDayTextView.setTextColor(selectedDateColors);
+        mSelectedMonthTextView.setTextColor(selectedDateColors);
+        mYearView.setTextColor(selectedDateColors);
+
+        final int datePickerColor = a.getColor(R.styleable.DatePickerDialog_date_picker_background_color, Color.WHITE);
+        mAnimator.setBackgroundColor(datePickerColor)   ;
+
+        final int buttonBarColor = a.getColor(R.styleable.DatePickerDialog_date_picker_button_bar_background, Color.WHITE);
+        mButtonBar.setBackgroundColor(buttonBarColor);
+
+        final int buttonBarButtonTextColor = a.getColor(R.styleable.DatePickerDialog_date_picker_button_bar_text_color, Color.BLACK);
+        mOkButton.setTextColor(buttonBarButtonTextColor);
+        mCancelButton.setTextColor(buttonBarButtonTextColor);
+
+        boolean selectOnlyFromHighlights = a.getBoolean(R.styleable.DatePickerDialog_select_only_from_highlights, false);
+        setSelectedOnlyHighlights(selectOnlyFromHighlights);
+
+        a.recycle();
+    }
 
     private void onDoneButtonClick() {
         tryVibrate();
         if (mCallBack != null) {
-            mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
-}
+
+            if (mCloseOnSingleTapDay) {
+                Calendar calendar = (Calendar) mDayPickerView.getItemAtPosition(mDayPickerView.getMostVisiblePosition());
+                if (calendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH)) {
+                    mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+                } else {
+                    mCallBack.onDateSet(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                }
+            } else {
+                mCallBack.onDateSet(this, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+            }
+        }
         dismiss();
     }
 
     public void onDayOfMonthSelected(int year, int month, int day) {
-		mCalendar.set(Calendar.YEAR, year);
-		mCalendar.set(Calendar.MONTH, month);
-		mCalendar.set(Calendar.DAY_OF_MONTH, day);
-		updatePickers();
-		updateDisplay(true);
 
-        if(mCloseOnSingleTapDay) {
-            onDoneButtonClick();
+        boolean allowSelect;
+        if (mSelectedOnlyFromHighlights) {
+            mTempCalendar.clear();
+            mTempCalendar.set(year, month, day);
+
+            allowSelect = mHighlights.containsKey(mTempCalendar.getTimeInMillis());
+        } else {
+            allowSelect = true;
+        }
+        if (allowSelect) {
+            mCalendar.set(Calendar.YEAR, year);
+            mCalendar.set(Calendar.MONTH, month);
+            mCalendar.set(Calendar.DAY_OF_MONTH, day);
+            updatePickers();
+            updateDisplay(true);
+
+            if (mCloseOnSingleTapDay) {
+                onDoneButtonClick();
+            }
         }
 	}
+
+
 
 	public void onSaveInstanceState(Bundle bundle) {
 		super.onSaveInstanceState(bundle);
@@ -356,6 +476,13 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		}
         bundle.putInt(KEY_LIST_POSITION, listPosition);
 		bundle.putBoolean(KEY_VIBRATE, mVibrate);
+
+        ArrayList<HighlightedDay> days = new ArrayList<>();
+        for (Map.Entry<Long, Integer> entry: mHighlights.entrySet()) {
+            days.add(new HighlightedDay(entry.getValue(), entry.getKey()));
+        }
+
+        bundle.putParcelableArrayList(KEY_HIGHLIGHTS, days);
 	}
 
 	public void onYearSelected(int year) {
@@ -412,6 +539,15 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
         mCloseOnSingleTapDay = closeOnSingleTapDay;
     }
 
+    public void setSelectedOnlyHighlights(boolean selectOnlyFromHighlights) {
+        mSelectedOnlyFromHighlights = selectOnlyFromHighlights;
+    }
+
+
+    public void setYearClickEnabled(boolean enabled) {
+        mYearClickEnabled = enabled;
+    }
+
     static abstract interface OnDateChangedListener {
 		public abstract void onDateChanged();
 	}
@@ -419,4 +555,39 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 	public static abstract interface OnDateSetListener {
 		public abstract void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day);
 	}
+
+
+    private static class HighlightedDay implements Parcelable {
+
+        public final int color;
+        public final long timestamp;
+
+        public HighlightedDay(int color, long timestamp) {
+            this.color = color;
+            this.timestamp = timestamp;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(color);
+            dest.writeLong(timestamp);
+        }
+
+        public static final Creator<HighlightedDay> CREATOR = new Creator<HighlightedDay>() {
+            @Override
+            public HighlightedDay createFromParcel(Parcel source) {
+                return new HighlightedDay(source.readInt(), source.readLong());
+            }
+
+            @Override
+            public HighlightedDay[] newArray(int size) {
+                return new HighlightedDay[size];
+            }
+        };
+    }
 }

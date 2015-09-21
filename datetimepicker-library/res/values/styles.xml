@@ -27,4 +27,32 @@
     </style>
 
     <style name="day_of_week_label_condensed" />
+
+
+    <style name="DatePickerDialogStyle">
+        <item name="date_picker_header_background_color">@color/calendar_header</item>
+        <item name="date_picker_header_text_color">@color/white</item>
+
+        <item name="date_picker_date_container_background_color">@color/white</item>
+        <item name="date_picker_selected_date_text_color">@color/date_picker_selector</item>
+
+        <item name="date_picker_background_color">@color/date_picker_view_animator</item>
+        <item name="date_picker_button_bar_background">@color/date_picker_view_animator</item>
+        <item name="date_picker_button_bar_text_color">@color/done_text_color_normal</item>
+
+        <item name="select_only_from_highlights">false</item>
+    </style>
+
+
+    <style name="SimpleMonthViewStyle">
+        <item name="day_text_color">@color/date_picker_text_normal</item>
+        <item name="today_color">@color/blue</item>
+        <item name="month_title_color">@color/date_picker_text_normal</item>
+        <item name="selected_day_highlight_color">#9933b5e5</item>
+    </style>
+
+    <style name="SimpleYearViewStyle">
+        <item name="year_text_color">@color/date_picker_text_normal</item>
+        <item name="selected_year_highlight_color">@color/blue</item>
+    </style>
 </resources>
