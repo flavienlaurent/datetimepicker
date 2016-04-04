@@ -200,5 +200,13 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 			result = 31 * result + year;
 			return result;
 		}
+
+		@Override public String toString() {
+			return "CalendarDay{" +
+					"day=" + day +
+					", month=" + month +
+					", year=" + year +
+					'}';
+		}
 	}
 }
