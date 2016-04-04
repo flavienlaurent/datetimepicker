@@ -7,8 +7,10 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.OnDayClickListener {
 
@@ -19,12 +21,14 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 	private final DatePickerController mController;
 
 	private CalendarDay mSelectedDay;
+	private List<CalendarDay> mHighlightedDays;
 
 	public SimpleMonthAdapter(Context context, DatePickerController datePickerController) {
 		mContext = context;
 		mController = datePickerController;
 		init();
 		setSelectedDay(mController.getSelectedDay());
+        setHighlightedDays(mController.getHighlightedDays());
 	}
 
 	private boolean isSelectedDayInMonth(int year, int month) {
@@ -45,10 +49,10 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		SimpleMonthView v;
-        HashMap<String, Integer> drawingParams = null;
+        HashMap<String, Object> drawingParams = null;
 		if (convertView != null) {
 			v = (SimpleMonthView) convertView;
-            drawingParams = (HashMap<String, Integer>) v.getTag();
+            drawingParams = (HashMap<String, Object>) v.getTag();
         } else {
 			v = new SimpleMonthView(mContext);
 			v.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -56,7 +60,7 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 			v.setOnDayClickListener(this);
 		}
         if (drawingParams == null) {
-            drawingParams = new HashMap<String, Integer>();
+            drawingParams = new HashMap<String, Object>();
         }
         drawingParams.clear();
 
@@ -67,10 +71,12 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
         if (isSelectedDayInMonth(year, month)) {
             selectedDay = mSelectedDay.day;
         }
+		int[] highlightedDays = daysInThisMonth(mHighlightedDays, year, month);
 
 		v.reuse();
 
         drawingParams.put(SimpleMonthView.VIEW_PARAMS_SELECTED_DAY, selectedDay);
+		drawingParams.put(SimpleMonthView.VIEW_PARAMS_HIGHLIGHTED_DAYS, highlightedDays);
         drawingParams.put(SimpleMonthView.VIEW_PARAMS_YEAR, year);
         drawingParams.put(SimpleMonthView.VIEW_PARAMS_MONTH, month);
         drawingParams.put(SimpleMonthView.VIEW_PARAMS_WEEK_START, mController.getFirstDayOfWeek());
@@ -78,6 +84,25 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 		v.invalidate();
 
 		return v;
+	}
+
+	/**
+	 * Filter out any days not in the specified month and year
+	 * and return an integer array of days in this month.
+     */
+	private static int[] daysInThisMonth(List<CalendarDay> highlightedDays, int year, int month) {
+		List<Integer> daysInMonth = new ArrayList<Integer>();
+		for (CalendarDay highlightedDay : highlightedDays) {
+			if (highlightedDay.month == month && highlightedDay.year == year) {
+				daysInMonth.add(highlightedDay.day);
+			}
+		}
+		int[] daysInMonthArr = new int[daysInMonth.size()];
+		for (int i = 0; i < daysInMonth.size(); i++) {
+			daysInMonthArr[i] = daysInMonth.get(i);
+		}
+
+		return daysInMonthArr;
 	}
 
 	protected void init() {
@@ -100,6 +125,11 @@ public class SimpleMonthAdapter extends BaseAdapter implements SimpleMonthView.O
 		mSelectedDay = calendarDay;
 		notifyDataSetChanged();
 	}
+
+    public void setHighlightedDays(List<CalendarDay> calendarDays) {
+        mHighlightedDays = calendarDays;
+        notifyDataSetChanged();
+    }
 
 	public static class CalendarDay {
 		private Calendar calendar;

@@ -11,11 +11,14 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.fourmob.datetimepicker.ArrayUtils;
 import com.fourmob.datetimepicker.R;
 import com.fourmob.datetimepicker.Utils;
 
 import java.security.InvalidParameterException;
 import java.text.DateFormatSymbols;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -27,6 +30,7 @@ public class SimpleMonthView extends View {
     public static final String VIEW_PARAMS_MONTH = "month";
     public static final String VIEW_PARAMS_YEAR = "year";
     public static final String VIEW_PARAMS_SELECTED_DAY = "selected_day";
+    public static final String VIEW_PARAMS_HIGHLIGHTED_DAYS = "highlighted_days";
     public static final String VIEW_PARAMS_WEEK_START = "week_start";
     public static final String VIEW_PARAMS_NUM_DAYS = "num_days";
     public static final String VIEW_PARAMS_FOCUS_MONTH = "focus_month";
@@ -54,10 +58,12 @@ public class SimpleMonthView extends View {
     protected Paint mMonthTitleBGPaint;
     protected Paint mMonthTitlePaint;
     protected Paint mSelectedCirclePaint;
+    protected Paint mHighlightedCirclePaint;
     protected int mDayTextColor;
     protected int mMonthTitleBGColor;
     protected int mMonthTitleColor;
     protected int mTodayNumberColor;
+    protected int mHighlightColor;
 
     private final StringBuilder mStringBuilder;
     private final Formatter mFormatter;
@@ -78,6 +84,7 @@ public class SimpleMonthView extends View {
     protected int mRowHeight = DEFAULT_HEIGHT;
     protected int mWidth;
     protected int mYear;
+    protected int[] mHighlightedDays = {};
 
 	private final Calendar mCalendar;
 	private final Calendar mDayLabelCalendar;
@@ -98,6 +105,7 @@ public class SimpleMonthView extends View {
 		mMonthTitleTypeface = resources.getString(R.string.sans_serif);
 		mDayTextColor = resources.getColor(R.color.date_picker_text_normal);
 		mTodayNumberColor = resources.getColor(R.color.blue);
+        mHighlightColor = resources.getColor(R.color.orange);
 		mMonthTitleColor = resources.getColor(R.color.white);
 		mMonthTitleBGColor = resources.getColor(R.color.circle_background);
 
@@ -172,6 +180,8 @@ public class SimpleMonthView extends View {
 			int x = paddingDay * (1 + dayOffset * 2) + mPadding;
 			if (mSelectedDay == day) {
 				canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, DAY_SELECTED_CIRCLE_SIZE, mSelectedCirclePaint);
+            } else if (ArrayUtils.contains(mHighlightedDays, day)) {
+                canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, DAY_SELECTED_CIRCLE_SIZE, mHighlightedCirclePaint);
             }
             if (mHasToday && (mToday == day)) {
 				mMonthNumPaint.setColor(mTodayNumberColor);
@@ -227,6 +237,14 @@ public class SimpleMonthView extends View {
         mSelectedCirclePaint.setStyle(Style.FILL);
         mSelectedCirclePaint.setAlpha(SELECTED_CIRCLE_ALPHA);
 
+        mHighlightedCirclePaint = new Paint();
+        mHighlightedCirclePaint.setFakeBoldText(true);
+        mHighlightedCirclePaint.setAntiAlias(true);
+        mHighlightedCirclePaint.setColor(mHighlightColor);
+        mHighlightedCirclePaint.setTextAlign(Align.CENTER);
+        mHighlightedCirclePaint.setStyle(Style.FILL);
+        mHighlightedCirclePaint.setAlpha(SELECTED_CIRCLE_ALPHA);
+
         mMonthDayLabelPaint = new Paint();
         mMonthDayLabelPaint.setAntiAlias(true);
         mMonthDayLabelPaint.setTextSize(MONTH_DAY_LABEL_TEXT_SIZE);
@@ -273,24 +291,27 @@ public class SimpleMonthView extends View {
 		requestLayout();
 	}
 
-	public void setMonthParams(HashMap<String, Integer> params) {
+	public void setMonthParams(HashMap<String, Object> params) {
         if (!params.containsKey(VIEW_PARAMS_MONTH) && !params.containsKey(VIEW_PARAMS_YEAR)) {
             throw new InvalidParameterException("You must specify month and year for this view");
         }
 		setTag(params);
 
         if (params.containsKey(VIEW_PARAMS_HEIGHT)) {
-            mRowHeight = params.get(VIEW_PARAMS_HEIGHT);
+            mRowHeight = (Integer) params.get(VIEW_PARAMS_HEIGHT);
             if (mRowHeight < MIN_HEIGHT) {
                 mRowHeight = MIN_HEIGHT;
             }
         }
         if (params.containsKey(VIEW_PARAMS_SELECTED_DAY)) {
-            mSelectedDay = params.get(VIEW_PARAMS_SELECTED_DAY);
+            mSelectedDay = (Integer) params.get(VIEW_PARAMS_SELECTED_DAY);
+        }
+        if (params.containsKey(VIEW_PARAMS_HIGHLIGHTED_DAYS)) {
+            mHighlightedDays = (int[]) params.get(VIEW_PARAMS_HIGHLIGHTED_DAYS);
         }
 
-        mMonth = params.get(VIEW_PARAMS_MONTH);
-        mYear = params.get(VIEW_PARAMS_YEAR);
+        mMonth = (Integer) params.get(VIEW_PARAMS_MONTH);
+        mYear = (Integer) params.get(VIEW_PARAMS_YEAR);
 
         final Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
@@ -303,7 +324,7 @@ public class SimpleMonthView extends View {
 		mDayOfWeekStart = mCalendar.get(Calendar.DAY_OF_WEEK);
 
         if (params.containsKey(VIEW_PARAMS_WEEK_START)) {
-            mWeekStart = params.get(VIEW_PARAMS_WEEK_START);
+            mWeekStart = (Integer) params.get(VIEW_PARAMS_WEEK_START);
         } else {
             mWeekStart = mCalendar.getFirstDayOfWeek();
         }

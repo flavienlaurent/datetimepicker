@@ -1,5 +1,7 @@
 package com.fourmob.datetimepicker.date;
 
+import java.util.List;
+
 abstract interface DatePickerController {
 	public abstract int getFirstDayOfWeek();
 
@@ -8,6 +10,8 @@ abstract interface DatePickerController {
 	public abstract int getMinYear();
 
 	public abstract SimpleMonthAdapter.CalendarDay getSelectedDay();
+
+	public abstract List<SimpleMonthAdapter.CalendarDay> getHighlightedDays();
 
 	public abstract void onDayOfMonthSelected(int year, int month, int day);
 

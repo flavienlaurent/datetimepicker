@@ -1,6 +1,7 @@
 package com.fourmob.datetimepicker.date;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -24,8 +25,10 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 public class DatePickerDialog extends DialogFragment implements View.OnClickListener, DatePickerController {
@@ -56,6 +59,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     private DateFormatSymbols mDateFormatSymbols = new DateFormatSymbols();
 
 	private final Calendar mCalendar = Calendar.getInstance();
+	private List<SimpleMonthAdapter.CalendarDay> mHighlightedDays;
     private HashSet<OnDateChangedListener> mListeners = new HashSet<OnDateChangedListener>();
     private OnDateSetListener mCallBack;
 
@@ -108,6 +112,9 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		return datePickerDialog;
 	}
 
+    public void setHighlightedDays(List<SimpleMonthAdapter.CalendarDay> highlightedDays) {
+		mHighlightedDays = highlightedDays;
+	}
 
 	public void setVibrate(boolean vibrate) {
 		mVibrate = vibrate;
@@ -215,6 +222,10 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		return new SimpleMonthAdapter.CalendarDay(mCalendar);
 	}
 
+	@Override public List<SimpleMonthAdapter.CalendarDay> getHighlightedDays() {
+		return Collections.unmodifiableList(mHighlightedDays);
+	}
+
 	public void initialize(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate) {
 		if (year > MAX_YEAR)
 			throw new IllegalArgumentException("year end must < " + MAX_YEAR);
@@ -239,7 +250,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		super.onCreate(bundle);
 		Activity activity = getActivity();
 		activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		mVibrator = ((Vibrator) activity.getSystemService("vibrator"));
+		mVibrator = ((Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE));
 		if (bundle != null) {
 			mCalendar.set(Calendar.YEAR, bundle.getInt(KEY_SELECTED_YEAR));
 			mCalendar.set(Calendar.MONTH, bundle.getInt(KEY_SELECTED_MONTH));
