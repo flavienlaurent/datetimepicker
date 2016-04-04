@@ -243,10 +243,20 @@ public class DayPickerView extends ListView implements AbsListView.OnScrollListe
                 final int bottom = child.getBottom();
                 final int midpoint = getHeight() / 2;
                 if (scroll && top < LIST_TOP_OFFSET) {
-                    if (bottom > midpoint) {
-                        smoothScrollBy(top, GOTO_SCROLL_DURATION);
+                    if (Build.VERSION.SDK_INT > 7){
+                        if (bottom > midpoint) {
+                            smoothScrollBy(top, GOTO_SCROLL_DURATION);
+                        } else {
+                            smoothScrollBy(bottom, GOTO_SCROLL_DURATION);
+                        }
                     } else {
-                        smoothScrollBy(bottom, GOTO_SCROLL_DURATION);
+                        if (bottom > midpoint) {
+                            //noinspection SuspiciousNameCombination
+                            scrollBy(top, GOTO_SCROLL_DURATION);
+                        } else {
+                            //noinspection SuspiciousNameCombination
+                            scrollBy(bottom, GOTO_SCROLL_DURATION);
+                        }
                     }
                 }
             } else {

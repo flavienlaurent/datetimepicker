@@ -559,8 +559,8 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
             mTransition.start();
         } else {
             if (Build.VERSION.SDK_INT >= 11) {
-                int hourAlpha = (index == HOUR_INDEX) ? 255 : 0;
-                int minuteAlpha = (index == MINUTE_INDEX) ? 255 : 0;
+                int hourAlpha = (index == HOUR_INDEX) ? 1 : 0;
+                int minuteAlpha = (index == MINUTE_INDEX) ? 1 : 0;
                 mHourRadialTextsView.setAlpha(hourAlpha);
                 mHourRadialSelectorView.setAlpha(hourAlpha);
                 mMinuteRadialTextsView.setAlpha(minuteAlpha);

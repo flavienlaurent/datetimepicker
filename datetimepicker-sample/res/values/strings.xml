@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="app_name">DateTimePicker sample</string>
+    <string name="app_name" tools:ignore="MissingTranslation">DateTimePicker sample</string>
 
 </resources>

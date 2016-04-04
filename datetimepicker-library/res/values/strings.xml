@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="http://schemas.android.com/apk/res/android">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="http://schemas.android.com/apk/res/android">
     <string name="done_label">Done</string>
     <string name="day_picker_description">Month grid of days</string>
     <string name="year_picker_description">Year list</string>
@@ -7,7 +7,7 @@
     <string name="select_year">Select year</string>
     <string name="item_is_selected">%1$s selected</string>
     <string name="sans_serif" translatable="false">sans-serif</string>
-    <string name="day_of_week_label_typeface" translatable="false">sans-serif</string>
+    <string name="day_of_week_label_typeface" translatable="false" tools:ignore="MissingTranslation">sans-serif</string>
 
     <string name="time_placeholder" translatable="false">--</string>
     <string name="time_separator" translatable="false">:</string>

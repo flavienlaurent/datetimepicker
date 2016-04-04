@@ -15,6 +15,7 @@
   ~ limitations under the License
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/time_picker_dialog"
     android:layout_height="@dimen/dialog_height"
     android:layout_width="wrap_content"
@@ -48,7 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white" >
+            android:background="@color/white"
+            tools:ignore="NewApi">
             <Button
                 android:id="@+id/done_button"
                 style="?android:attr/buttonBarButtonStyle"
