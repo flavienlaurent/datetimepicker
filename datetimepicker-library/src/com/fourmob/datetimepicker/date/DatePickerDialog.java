@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -59,7 +61,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     private DateFormatSymbols mDateFormatSymbols = new DateFormatSymbols();
 
 	private final Calendar mCalendar = Calendar.getInstance();
-	private List<SimpleMonthAdapter.CalendarDay> mHighlightedDays;
+	private @NonNull List<SimpleMonthAdapter.CalendarDay> mHighlightedDays = Collections.emptyList();
     private HashSet<OnDateChangedListener> mListeners = new HashSet<OnDateChangedListener>();
     private OnDateSetListener mCallBack;
 
@@ -112,7 +114,7 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		return datePickerDialog;
 	}
 
-    public void setHighlightedDays(List<SimpleMonthAdapter.CalendarDay> highlightedDays) {
+    public void setHighlightedDays(@NonNull List<SimpleMonthAdapter.CalendarDay> highlightedDays) {
 		mHighlightedDays = highlightedDays;
 	}
 
