@@ -99,12 +99,16 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     }
 
 	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day) {
-		return newInstance(onDateSetListener, year, month, day, true);
+		return newInstance(onDateSetListener, year, month, day, true, null);
 	}
 
 	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate) {
+		return newInstance(onDateSetListener, year, month, day, vibrate, null);
+	}
+
+	public static DatePickerDialog newInstance(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate, Locale locale) {
 		DatePickerDialog datePickerDialog = new DatePickerDialog();
-		datePickerDialog.initialize(onDateSetListener, year, month, day, vibrate);
+		datePickerDialog.initialize(onDateSetListener, year, month, day, vibrate, locale);
 		return datePickerDialog;
 	}
 
@@ -215,11 +219,13 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 		return new SimpleMonthAdapter.CalendarDay(mCalendar);
 	}
 
-	public void initialize(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate) {
+	public void initialize(OnDateSetListener onDateSetListener, int year, int month, int day, boolean vibrate, Locale locale) {
 		if (year > MAX_YEAR)
 			throw new IllegalArgumentException("year end must < " + MAX_YEAR);
 		if (year < MIN_YEAR)
 			throw new IllegalArgumentException("year end must > " + MIN_YEAR);
+    if (locale != null)
+      mCalendar = Calendar.getInstance(locale)
 		mCallBack = onDateSetListener;
 		mCalendar.set(Calendar.YEAR, year);
 		mCalendar.set(Calendar.MONTH, month);
