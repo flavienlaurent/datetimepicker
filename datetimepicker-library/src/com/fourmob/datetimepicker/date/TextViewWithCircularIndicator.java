@@ -36,13 +36,9 @@ public class TextViewWithCircularIndicator extends TextView {
 
 	public void drawIndicator(boolean drawIndicator) {
 		this.mDrawCircle = drawIndicator;
-	}
 
-	public CharSequence getContentDescription() {
-		CharSequence text = getText();
 		if (this.mDrawCircle)
-			text = String.format(this.mItemIsSelectedText, text);
-		return text;
+			setContentDescription(String.format(this.mItemIsSelectedText, getText()));
 	}
 
 	public void onDraw(Canvas canvas) {
