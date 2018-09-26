@@ -9,6 +9,7 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.View;
+
 import com.fourmob.datetimepicker.R;
 import com.fourmob.datetimepicker.Utils;
 
@@ -181,7 +182,7 @@ public class SimpleMonthView extends View {
 		this.mMonthTitlePaint.setFakeBoldText(true);
 		this.mMonthTitlePaint.setAntiAlias(true);
 		this.mMonthTitlePaint.setTextSize(MONTH_LABEL_TEXT_SIZE);
-		this.mMonthTitlePaint.setTypeface(Typeface.create(this.mMonthTitleTypeface, 1));
+        this.mMonthTitlePaint.setTypeface(Typeface.create(this.mMonthTitleTypeface, Typeface.BOLD));
 		this.mMonthTitlePaint.setColor(this.mDayTextColor);
 		this.mMonthTitlePaint.setTextAlign(Paint.Align.CENTER);
 		this.mMonthTitlePaint.setStyle(Paint.Style.FILL);
@@ -202,7 +203,7 @@ public class SimpleMonthView extends View {
 		this.mMonthDayLabelPaint.setAntiAlias(true);
 		this.mMonthDayLabelPaint.setTextSize(MONTH_DAY_LABEL_TEXT_SIZE);
 		this.mMonthDayLabelPaint.setColor(this.mDayTextColor);
-		this.mMonthDayLabelPaint.setTypeface(Typeface.create(this.mDayOfWeekTypeface, 0));
+        this.mMonthDayLabelPaint.setTypeface(Typeface.create(this.mDayOfWeekTypeface, Typeface.NORMAL));
 		this.mMonthDayLabelPaint.setStyle(Paint.Style.FILL);
 		this.mMonthDayLabelPaint.setTextAlign(Paint.Align.CENTER);
 		this.mMonthDayLabelPaint.setFakeBoldText(true);
