@@ -3,8 +3,5 @@
     android:versionCode="100"
     android:versionName="1.0.0" >
 
-    <uses-sdk
-        android:minSdkVersion="7"
-        android:targetSdkVersion="17" />
-
+    <uses-permission android:name="android.permission.VIBRATE" />
 </manifest>

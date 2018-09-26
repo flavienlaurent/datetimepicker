@@ -1,17 +1,8 @@
-apply plugin: 'android-library'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile 'com.android.support:support-v4:18.0.+'
-    compile 'com.nineoldandroids:library:2.4.+'
-}
+apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 17
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.2"
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -19,4 +10,13 @@ android {
             res.srcDirs = ['res']
         }
     }
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.nineoldandroids:library:2.4.0'
 }
